@@ -1,0 +1,39 @@
+{
+	"compilerOptions": {
+		"target": "ESNext",
+		"module": "NodeNext",
+		"moduleResolution": "NodeNext",
+		"lib": ["ESNext", "DOM"],
+		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": true,
+		"strict": true,
+		"allowImportingTsExtensions": true,
+		"forceConsistentCasingInFileNames": true,
+		"skipLibCheck": false,
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"noEmit": true,
+		// Types
+		"types": ["jquery", "jest", "fvtt-types"],
+
+		// Paths
+		"baseUrl": ".",
+		"paths": {
+			"@applications": ["src/module/applications/index.ts"],
+			"@applications/*": ["src/module/applications/*"],
+			"@const": ["src/module/constants.ts"],
+			"@config": ["src/module/config.ts"],
+			"@data": ["src/module/data/index.ts"],
+			"@helpers": ["src/module/helpers/index.ts"],
+			"@data/*": ["src/module/data/*"],
+			"@documents": ["src/module/documents/index.ts"],
+			"@documents/*": ["src/module/documents/*"],
+			"@hooks/*": ["src/module/hooks/*"],
+			"@utils/*": ["src/module/utils/*.ts"],
+			"@utils": ["src/module/utils/index.ts"],
+			"@/*": ["src/module/*.ts"]
+		}
+	},
+	"include": ["src/**/*.ts"],
+	"exclude": ["node_modules", "dist", "coverage"]
+}

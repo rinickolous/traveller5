@@ -1,0 +1,64 @@
+{
+	"id": "traveller5",
+	"title": "Traveller 5",
+	"description": "A Traveller 5 Game Aid for Foundry Virtual Tabletop",
+	"version": "0.0.1-dev",
+	"compatibility": {
+		"minimum": 13.346,
+		"verified": 13,
+		"maximum": 13
+	},
+	"relationships": {},
+	"authors": [
+		{
+			"name": "Mikolaj Tomczynski",
+			"url": "https://github.com/rinickolous",
+			"discord": "sasiedny"
+		}
+	],
+	"esmodules": ["traveller5.js"],
+	"styles": ["traveller5.css"],
+	"packs": [],
+	"languages": [
+		{
+			"lang": "en",
+			"name": "English",
+			"path": "lang/en.json"
+		}
+	],
+	"media": [
+		{
+			"type": "setup",
+			"url": "systems/traveller5/assets/ui/sign-in-background.webp",
+			"thumbnail": "systems/traveller5/assets/ui/sign-in-background.webp"
+		}
+	],
+	"background": "systems/traveller5/assets/ui/sign-in-background.webp",
+	"manifest": "https://raw.githubusercontent.com/rinickolous/traveller5/master/system.json",
+	"download": "this is auto-replaced",
+	"url": "https://github.com/rinickolous/traveller5",
+	"readme": "https://github.com/rinickolous/traveller5/wiki",
+	"bugs": "https://github.com/rinickolous/traveller5/issues",
+	"changelog": "https://github.com/rinickolous/traveller5/releases",
+	"license": "https://github.com/rinickolous/traveller5/blob/master/LICENSE",
+	"documentTypes": {
+		"Actor": {
+			"character": {
+				"htmlFields": []
+			},
+			"starship": {
+				"htmlFields": []
+			}
+		},
+		"Item": {
+			"equipment": {
+				"htmlFields": []
+			}
+		},
+		"JournalEntryPage": {
+			"planet": {
+				"htmlFields": []
+			}
+		}
+	}
+}

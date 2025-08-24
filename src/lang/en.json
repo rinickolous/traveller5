@@ -1,0 +1,16 @@
+{
+	"USER": {
+		"RoleAssistant": "Assistant Referee",
+		"RoleGamemaster": "Referee"
+	},
+	"TRAVELLER": {
+		"Setting": {
+			"MigrationVersion": {
+				"Label": "Migration Version",
+				"Hint": "Last Performed Migration",
+				"WorldWarning": "Applying migrations for version {version}",
+				"WorldSuccess": "Successfully applied migrations for version {version}"
+			}
+		}
+	}
+}
