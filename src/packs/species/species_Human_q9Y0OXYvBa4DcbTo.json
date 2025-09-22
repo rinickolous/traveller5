@@ -1,0 +1,86 @@
+{
+  "name": "Human",
+  "type": "species",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "senses": {
+      "vision": null,
+      "hearing": null,
+      "touch": null,
+      "smell": null,
+      "awareness": null,
+      "perceptionm": null
+    },
+    "characteristics": {
+      "c1": {
+        "type": "Strength",
+        "formulas": [
+          "2d6"
+        ]
+      },
+      "c2": {
+        "type": "Dexterity",
+        "formulas": [
+          "2d6"
+        ]
+      },
+      "c3": {
+        "type": "Endurance",
+        "formulas": [
+          "2d6"
+        ]
+      },
+      "c4": {
+        "type": "Intelligence",
+        "formulas": [
+          "2d6"
+        ]
+      },
+      "c5": {
+        "type": "Education",
+        "formulas": [
+          "2d6"
+        ]
+      },
+      "c6": {
+        "type": "SocialStanding",
+        "formulas": [
+          "2d6"
+        ]
+      },
+      "cs": {
+        "type": "Sanity",
+        "formulas": [
+          "2d6"
+        ]
+      },
+      "cp": {
+        "type": "Psionics",
+        "formulas": [
+          "2d6"
+        ]
+      }
+    },
+    "genders": []
+  },
+  "effects": [],
+  "folder": null,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.348",
+    "systemId": "traveller5",
+    "systemVersion": "0.0.1-dev",
+    "createdTime": 1758205770826,
+    "modifiedTime": null,
+    "lastModifiedBy": null
+  },
+  "_id": "q9Y0OXYvBa4DcbTo",
+  "sort": 0,
+  "_key": "!items!q9Y0OXYvBa4DcbTo"
+}

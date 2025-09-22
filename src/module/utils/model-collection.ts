@@ -1,13 +1,18 @@
-import DataModel = foundry.abstract.DataModel;
+import { PseudoDocument } from "@data/pseudo-documents/pseudo-document.ts";
+import { TypedPseudoDocument } from "@data/pseudo-documents/typed-pseudo-document.ts";
 
 /* ---------------------------------------- */
 
-export default class ModelCollection<
-	Model extends DataModel.Any = DataModel.Any,
-> extends foundry.utils.Collection<Model> {
+export default class ModelCollection<Model extends PseudoDocument = PseudoDocument> extends foundry.utils
+	.Collection<Model> {
 	/* ---------------------------------------- */
 	/*  Properties                              */
 	/* ---------------------------------------- */
+
+	/**
+	 * Pseudo-document base model.
+	 */
+	declare documentClass: typeof PseudoDocument;
 
 	/**
 	 * Pre-organized arrays of data models by type.
@@ -39,19 +44,19 @@ export default class ModelCollection<
 	/**
 	 * Fetch an array of data models of a certain type.
 	 */
-	getByType(type: string): Model[] {
-		return Array.from(this.#types.get(type) ?? []).map((key) =>
-			this.get(key)
-		) as Model[];
+	getByType<DocumentName extends t5.CONST.PSEUDO_DOCUMENT_NAMES, Type extends string>(
+		type: Type
+	): TypedPseudoDocument.OfType<DocumentName, Type>[] {
+		return Array.from(this.#types.get(type) ?? []).map((key) => this.get(key)) as TypedPseudoDocument.OfType<
+			DocumentName,
+			Type
+		>[];
 	}
 
 	/* ---------------------------------------- */
 
 	override set(key: string, value: Model) {
-		const type =
-			"type" in value && typeof value.type === "string"
-				? value.type
-				: "base";
+		const type = "type" in value && typeof value.type === "string" ? value.type : "base";
 
 		if (!this.#types.has(type)) this.#types.set(type, new Set());
 		this.#types.get(type)!.add(key);
@@ -72,10 +77,7 @@ export default class ModelCollection<
 	override delete(key: string) {
 		const value = this.get(key);
 		if (value) {
-			const typeKey =
-				"type" in value && typeof value.type === "string"
-					? value.type
-					: "base";
+			const typeKey = "type" in value && typeof value.type === "string" ? value.type : "base";
 			if (typeKey) this.#types.get(typeKey)?.delete(key);
 		}
 		return super.delete(key);
@@ -86,14 +88,8 @@ export default class ModelCollection<
 	/**
 	 * Test the given predicate against every entry in the Collection.
 	 */
-	every(
-		predicate: (arg0: any, arg1: number, arg2: ModelCollection) => boolean
-	): boolean {
-		return this.reduce(
-			(pass, v, i) =>
-				pass && predicate(v, i, this as unknown as ModelCollection),
-			true
-		);
+	every(predicate: (arg0: any, arg1: number, arg2: ModelCollection) => boolean): boolean {
+		return this.reduce((pass, v, i) => pass && predicate(v, i, this as unknown as ModelCollection), true);
 	}
 
 	/* ---------------------------------------- */

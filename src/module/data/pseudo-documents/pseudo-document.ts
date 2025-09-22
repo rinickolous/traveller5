@@ -4,6 +4,8 @@ import Document = foundry.abstract.Document;
 import { AnyObject } from "fvtt-types/utils";
 
 import { api } from "@applications";
+import { T5Dialog } from "@applications/api/dialog.ts";
+import { systemPath } from "@const";
 
 const pseudoDocumentSchema = () => {
 	return {
@@ -28,7 +30,7 @@ declare namespace PseudoDocument {
 		/* Record of document names of pseudo-documents and the path to the collection. */
 		embedded: Record<string, string>;
 		/* The class used to render this pseudo-document. */
-		sheetClass?: typeof api.PseudoDocumentSheet;
+		sheetClass?: typeof api.PseudoDocumentSheet<any>;
 	}
 
 	export type Schema = ReturnType<typeof pseudoDocumentSchema>;
@@ -66,7 +68,11 @@ class PseudoDocument<
 
 	/* ---------------------------------------- */
 
-	static override LOCALIZATION_PREFIXES: string[] = ["DOCUMENT"];
+	static override LOCALIZATION_PREFIXES: string[] = ["TRAVELLER.PSEUDO"];
+
+	/* ---------------------------------------- */
+
+	static CREATE_TEMPLATE = systemPath("templates/sheets/pseudo-documents/base-create-dialog.hbs");
 
 	/* ---------------------------------------- */
 
@@ -93,11 +99,7 @@ class PseudoDocument<
 	 */
 	get uuid(): string {
 		let parent = this.parent;
-		while (
-			!(parent instanceof PseudoDocument) &&
-			!(parent instanceof Document)
-		)
-			parent = parent.parent;
+		while (!(parent instanceof PseudoDocument) && !(parent instanceof Document)) parent = parent.parent;
 		return [parent.uuid, this.documentName, this.id].join(".");
 	}
 
@@ -165,21 +167,16 @@ class PseudoDocument<
 	getEmbeddedDocument(
 		embeddedName: string,
 		id: string,
-		{
-			invalid = false,
-			strict = false,
-		}: { invalid?: boolean; strict?: boolean } = {}
+		{ invalid = false, strict = false }: { invalid?: boolean; strict?: boolean } = {}
 	): PseudoDocument | null {
 		const embeds = this.metadata.embedded ?? {};
 		if (embeddedName in embeds) {
 			const path = embeds[embeddedName];
 			return (
-				(
-					foundry.utils.getProperty(
-						this,
-						path
-					) as t5.utils.ModelCollection<PseudoDocument>
-				).get(id, { invalid, strict }) ?? null
+				(foundry.utils.getProperty(this, path) as t5.utils.ModelCollection<PseudoDocument>).get(id, {
+					invalid,
+					strict,
+				}) ?? null
 			);
 		}
 		return null;
@@ -190,19 +187,14 @@ class PseudoDocument<
 	/**
 	 * Obtain the embedded collection of a given pseudo-document type.
 	 */
-	getEmbeddedPseudoDocumentCollection(
-		embeddedName: string
-	): tu.ModelCollection {
+	getEmbeddedPseudoDocumentCollection(embeddedName: string): tu.ModelCollection {
 		const collectionPath = this.metadata.embedded[embeddedName];
 		if (!collectionPath) {
 			throw new Error(
 				`${embeddedName} is not a valid embedded Pseudo-Document within the [${"type" in this ? this.type : "base"}] ${this.documentName} subtype!`
 			);
 		}
-		return foundry.utils.getProperty(
-			this,
-			collectionPath
-		) as tu.ModelCollection;
+		return foundry.utils.getProperty(this, collectionPath) as tu.ModelCollection;
 	}
 
 	/* ---------------------------------------- */
@@ -228,14 +220,8 @@ class PseudoDocument<
 		const docName = this.documentName;
 		// @ts-expect-error: TODO: revise parent types
 		const fieldPath = this.parent.constructor.metadata.embedded[docName];
-		const parent =
-			this.parent instanceof foundry.abstract.TypeDataModel
-				? this.parent.parent
-				: this.parent;
-		const source = foundry.utils.getProperty(
-			parent._source,
-			fieldPath
-		) as AnyObject;
+		const parent = this.parent instanceof foundry.abstract.TypeDataModel ? this.parent.parent : this.parent;
+		const source = foundry.utils.getProperty(parent._source, fieldPath) as AnyObject;
 		if (foundry.utils.getType(source) !== "Object") {
 			throw new Error("Source is not an object!");
 		}
@@ -250,28 +236,19 @@ class PseudoDocument<
 	 */
 	static async create(
 		data: fields.SchemaField.CreateData<PseudoDocument.Schema>,
-		{
-			parent,
-			...operation
-		}: Partial<foundry.abstract.types.DatabaseCreateOperation>
+		{ parent, ...operation }: Partial<foundry.abstract.types.DatabaseCreateOperation>
 	): Promise<Document.Any | undefined> {
 		if (!parent) {
-			throw new Error(
-				"A parent document must be specified for the creation of a pseudo-document!"
-			);
+			throw new Error("A parent document must be specified for the creation of a pseudo-document!");
 		}
 		const id =
-			operation.keepId &&
-			foundry.data.validators.isValidId(
-				(data._id as string | undefined) ?? ""
-			)
+			operation.keepId && foundry.data.validators.isValidId((data._id as string | undefined) ?? "")
 				? data._id
 				: foundry.utils.randomID();
 
-		const fieldPath = (
-			parent.system!
-				.constructor as typeof traveller.data.Item.BaseItemModel
-		).metadata.embedded?.[this.metadata.documentName];
+		const fieldPath = (parent.system!.constructor as typeof traveller.data.Item.BaseItemModel).metadata.embedded?.[
+			this.metadata.documentName
+		];
 		if (!fieldPath) {
 			const type = "type" in parent ? parent.type : "base";
 			throw new Error(
@@ -288,16 +265,61 @@ class PseudoDocument<
 	/* ---------------------------------------- */
 
 	/**
+	 * Prompt for creating this pseudo-document.
+	 */
+	static async createDialog(
+		data: AnyObject = {},
+		{ parent, ...operation }: { parent?: foundry.abstract.Document.Any } = {}
+	): Promise<PseudoDocument | null> {
+		const content = await foundry.applications.handlebars.renderTemplate(
+			this.CREATE_TEMPLATE,
+			this._prepareCreateDialogContext(parent)
+		);
+
+		const result = await T5Dialog.input<foundry.applications.api.Dialog.InputConfig>({
+			content,
+			window: {
+				title: tu.i18n.format("DOCUMENT.New", {
+					type: tu.i18n.localize(`DOCUMENT.${this.metadata.documentName}`),
+				}),
+				icon: this.metadata.icon,
+			},
+			render: (event, dialog) => this._createDialogRenderCallback(event, dialog),
+		});
+
+		if (!result) return null;
+		// @ts-expect-error: The result should be an object type
+		return this.create({ ...data, ...result }, { parent, ...operation });
+	}
+
+	/* ---------------------------------------- */
+
+	/**
+	 * Prepares context for use with {@link CREATE_TEMPLATE}.
+	 */
+	protected static _prepareCreateDialogContext(_parent: foundry.abstract.Document.Any | undefined) {
+		return {
+			fields: this.schema.fields,
+		};
+	}
+
+	/* ---------------------------------------- */
+
+	/**
+	 * Render callback for dynamic handling on the .
+	 */
+	protected static _createDialogRenderCallback(_event: Event, _dialog: foundry.applications.api.Dialog) {}
+
+	/* ---------------------------------------- */
+
+	/**
 	 * Delete this pseudo-document.
 	 * @returns a promise that resolves to the updated document.
 	 */
 	async delete(
-		operation: Document.Database.DeleteOperation<
-			foundry.abstract.types.DatabaseDeleteOperation<Document.Any>
-		>
+		operation: Document.Database.DeleteOperation<foundry.abstract.types.DatabaseDeleteOperation<Document.Any>> = {}
 	): Promise<Document.Any | undefined> {
-		if (!this.isSource)
-			throw new Error("You cannot delete a non-source pseudo-document!");
+		if (!this.isSource) throw new Error("You cannot delete a non-source pseudo-document!");
 
 		Object.assign(operation, {
 			pseudo: {
@@ -308,12 +330,7 @@ class PseudoDocument<
 		});
 		const update = { [`${this.fieldPath}.-=${this.id}`]: null };
 
-		(this.constructor as typeof PseudoDocument)._configureUpdates(
-			"delete",
-			this.document,
-			update,
-			operation
-		);
+		(this.constructor as typeof PseudoDocument)._configureUpdates("delete", this.document, update, operation);
 
 		// @ts-expect-error: TODO: define the Document types better so this doesn't resolve to "never"
 		return this.document.update(update, operation);
@@ -326,19 +343,13 @@ class PseudoDocument<
 	 * @returns {Promise<Document>}    A promise that resolves to the updated document.
 	 */
 	async duplicate(): Promise<Document.Any | undefined> {
-		if (!this.isSource)
-			throw new Error(
-				"You cannot duplicate a non-source pseudo-document!"
-			);
+		if (!this.isSource) throw new Error("You cannot duplicate a non-source pseudo-document!");
 		const activityData = foundry.utils.mergeObject(this.toObject(), {
 			name: game.i18n?.format("DOCUMENT.CopyOf", {
 				name: "name" in this ? (this.name as string) : "",
 			}),
 		});
-		return (this.constructor as typeof PseudoDocument).create(
-			activityData,
-			{ parent: this.document }
-		);
+		return (this.constructor as typeof PseudoDocument).create(activityData, { parent: this.document });
 	}
 
 	/* ---------------------------------------- */
@@ -353,16 +364,10 @@ class PseudoDocument<
 		change: AnyObject = {},
 		operation: Document.Database.UpdateOperation<foundry.abstract.types.DatabaseUpdateOperation> = {}
 	): Promise<Parent> {
-		if (!this.isSource)
-			throw new Error("You cannot update a non-source pseudo-document!");
+		if (!this.isSource) throw new Error("You cannot update a non-source pseudo-document!");
 		const path = [this.fieldPath, this.id].join(".");
 		const update = { [path]: change };
-		(this.constructor as typeof PseudoDocument)._configureUpdates(
-			"update",
-			this.document,
-			update,
-			operation
-		);
+		(this.constructor as typeof PseudoDocument)._configureUpdates("update", this.document, update, operation);
 		// @ts-expect-error: TODO: define the Document types better so this doesn't resolve to "never"
 		return this.document.update(update, operation);
 	}

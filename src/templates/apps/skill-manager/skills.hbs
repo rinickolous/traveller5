@@ -1,0 +1,23 @@
+<section class="tab {{tab.cssClass}}" data-group="primary" data-tab="skills">
+	<button data-action="addSkill" class="fa-solid fa-plus"></button>
+	<table class="skill-list">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Tags</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			{{#each skills}}
+				<tr>
+					<td><input name="skills.{{@index}}.name" /></td>
+					<!-- TODO: add some sort of tag input where you can click on individual already inputted tags to remove them. -->
+					<!-- Or maybe that isn't very retro? -->
+					<td><input name="skills.{{@index}}.name" /></td>
+					<td><button class="fa-solid fa-trash" data-action="deleteSkill"></button></td>
+				</tr>
+			{{/each}}
+		</tbody>
+	</table>
+</section>

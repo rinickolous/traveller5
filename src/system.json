@@ -18,7 +18,13 @@
 	],
 	"esmodules": ["traveller5.js"],
 	"styles": ["traveller5.css"],
-	"packs": [],
+	"packs": [
+		{
+			"name": "species",
+			"label": "TRAVELLER.COMPENDIUM.species",
+			"type": "Item"
+		}
+	],
 	"languages": [
 		{
 			"lang": "en",
@@ -51,7 +57,13 @@
 			}
 		},
 		"Item": {
-			"equipment": {
+			"species": {
+				"htmlFields": []
+			},
+			"armor": {
+				"htmlFields": []
+			},
+			"weapon": {
 				"htmlFields": []
 			}
 		},

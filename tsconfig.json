@@ -19,6 +19,7 @@
 		// Paths
 		"baseUrl": ".",
 		"paths": {
+			"@assets": ["src/module/applications/index.ts"],
 			"@applications": ["src/module/applications/index.ts"],
 			"@applications/*": ["src/module/applications/*"],
 			"@const": ["src/module/constants.ts"],

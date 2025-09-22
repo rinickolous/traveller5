@@ -15,7 +15,7 @@ const config = Vite.defineConfig(({ mode }): Vite.UserConfig => {
 		},
 		build: {
 			outDir: "dist",
-			emptyOutDir: true,
+			emptyOutDir: false,
 			rollupOptions: {
 				input: {
 					traveller5: path.resolve(__dirname, "src/traveller5.ts"),
@@ -27,6 +27,7 @@ const config = Vite.defineConfig(({ mode }): Vite.UserConfig => {
 				},
 			},
 			sourcemap: true,
+			minify: buildMode === "production",
 		},
 		server: {
 			fs: {

@@ -1,18 +1,21 @@
+import Logger from "@utils/logger";
 import { AnyObject, DeepPartial } from "fvtt-types/utils";
 import Application = foundry.applications.api.Application;
 
-declare namespace PseudoDocumentSheet {
+namespace PseudoDocumentSheet {
 	export interface Configuration extends Application.Configuration {
 		document: {
 			uuid: string;
 			document: foundry.abstract.Document.Any;
 		};
 	}
+
+	export type RenderContext = Application.RenderContext;
 }
 
-export default class PseudoDocumentSheet extends foundry.applications.api.HandlebarsApplicationMixin(
-	Application
-) {
+class PseudoDocumentSheet<
+	TPseudo extends t5.data.pseudoDocuments.PseudoDocument = t5.data.pseudoDocuments.PseudoDocument,
+> extends foundry.applications.api.HandlebarsApplicationMixin(Application) {
 	constructor(
 		options: DeepPartial<PseudoDocumentSheet.Configuration> & {
 			document: { uuid: string; document: foundry.abstract.Document.Any };
@@ -25,8 +28,7 @@ export default class PseudoDocumentSheet extends foundry.applications.api.Handle
 
 	/* ---------------------------------------- */
 
-	static override DEFAULT_OPTIONS: DeepPartial<Application.Configuration> &
-		object = {
+	static override DEFAULT_OPTIONS: DeepPartial<Application.Configuration> & object = {
 		id: "{id}",
 		actions: {
 			copyUuid: {
@@ -47,10 +49,7 @@ export default class PseudoDocumentSheet extends foundry.applications.api.Handle
 	/**
 	 * Registered sheets. A map of documents to a map of pseudo-document uuids and their sheets.
 	 */
-	static #sheets: Map<
-		foundry.abstract.Document.Any,
-		Map<string, PseudoDocumentSheet>
-	> = new Map();
+	static #sheets: Map<foundry.abstract.Document.Any, Map<string, PseudoDocumentSheet>> = new Map();
 
 	/* ---------------------------------------- */
 
@@ -58,27 +57,20 @@ export default class PseudoDocumentSheet extends foundry.applications.api.Handle
 	 * Retrieve or register a new instance of a pseudo-document sheet.
 	 * @returns An existing or new instance of a sheet, or null if the pseudo-document does not have a sheet class.
 	 */
-	static getSheet(
-		pseudoDocument: t5.data.pseudoDocuments.PseudoDocument
-	): PseudoDocumentSheet | null {
+	static getSheet(pseudoDocument: t5.data.pseudoDocuments.PseudoDocument): PseudoDocumentSheet | null {
 		const doc = pseudoDocument.document;
 		if (!PseudoDocumentSheet.#sheets.get(doc)) {
 			PseudoDocumentSheet.#sheets.set(doc, new Map());
 		}
 		if (!PseudoDocumentSheet.#sheets.get(doc)?.get(pseudoDocument.uuid)) {
 			const Cls = pseudoDocument.metadata.sheetClass;
-			if (!Cls) return null;
-			PseudoDocumentSheet.#sheets
-				.get(doc)
-				?.set(
-					pseudoDocument.uuid,
-					new Cls({ document: pseudoDocument })
-				);
+			if (!Cls) {
+				tu.Logger.error(`No sheet class registered for this pseudo-document`);
+				return null;
+			}
+			PseudoDocumentSheet.#sheets.get(doc)?.set(pseudoDocument.uuid, new Cls({ document: pseudoDocument }));
 		}
-		return (
-			PseudoDocumentSheet.#sheets.get(doc)?.get(pseudoDocument.uuid) ||
-			null
-		);
+		return PseudoDocumentSheet.#sheets.get(doc)?.get(pseudoDocument.uuid) || null;
 	}
 
 	/* ---------------------------------------- */
@@ -86,20 +78,17 @@ export default class PseudoDocumentSheet extends foundry.applications.api.Handle
 	/**
 	 * The pseudo-document. This can be null if a parent pseudo-document is removed.
 	 */
-	get pseudoDocument(): t5.data.pseudoDocuments.PseudoDocument | null {
+	get pseudoDocument(): TPseudo | null {
 		let relative = this.document;
-		const uuidParts = this.#pseudoUuid
-			.replace(relative.uuid, "")
-			.slice(1)
-			.split(".");
+		const uuidParts = this.#pseudoUuid.replace(relative.uuid, "").slice(1).split(".");
 		for (let i = 0; i < uuidParts.length; i += 2) {
 			const dname = uuidParts[i];
 			const id = uuidParts[i + 1];
-			// @ts-expect-error: TODO: define the Document types better so this doesn't resolve to "never"
-			relative = relative?.getEmbeddedDocument(dname, id);
+			// @ts-expect-error: Some type issues but in practice not a problem.
+			relative = relative?.getEmbeddedDocument(dname, id, {});
 			if (!relative) return null;
 		}
-		return relative as unknown as t5.data.pseudoDocuments.PseudoDocument | null;
+		return relative as unknown as TPseudo;
 	}
 
 	/* ---------------------------------------- */
@@ -126,11 +115,7 @@ export default class PseudoDocumentSheet extends foundry.applications.api.Handle
 	/* ---------------------------------------- */
 
 	override get title(): string {
-		const {
-			documentName,
-			name,
-			id,
-		}: { documentName: string; name: string; id: string } = this
+		const { documentName, name, id }: { documentName: string; name: string; id: string } = this
 			.pseudoDocument as any;
 		return `${game.i18n?.localize(`DOCUMENT.${documentName}`)}: ${name ? name : id}`;
 	}
@@ -167,9 +152,7 @@ export default class PseudoDocumentSheet extends foundry.applications.api.Handle
 
 	/* -------------------------------------------------- */
 
-	override async _renderFrame(
-		options: DeepPartial<Application.RenderOptions>
-	): Promise<HTMLElement> {
+	override async _renderFrame(options: DeepPartial<Application.RenderOptions>): Promise<HTMLElement> {
 		const frame = await super._renderFrame(options);
 		const copyLabel = game.i18n?.localize("SHEETS.CopyUuid") ?? "";
 
@@ -189,13 +172,32 @@ export default class PseudoDocumentSheet extends foundry.applications.api.Handle
 
 	/* -------------------------------------------------- */
 
-	override _canRender(
-		_options: DeepPartial<Application.RenderOptions>
-	): false | void {
+	override _canRender(_options: DeepPartial<Application.RenderOptions>): false | void {
 		if (!this.pseudoDocument) {
 			if (this.rendered) this.close();
 			return false;
 		}
+	}
+
+	/* ---------------------------------------- */
+
+	protected override async _prepareContext(
+		options: DeepPartial<Application.RenderOptions> & { isFirstRender: boolean }
+	): Promise<Application.RenderContext> {
+		const document = this.pseudoDocument;
+		if (!document) {
+			Logger.error("This pseudo-document no longer exists.");
+			return super._prepareContext(options);
+		}
+
+		const context = {
+			tabs: this._prepareTabs("primary"),
+			document,
+			source: document._source,
+			fields: document.schema.fields,
+		};
+
+		return context;
 	}
 
 	/* -------------------------------------------------- */
@@ -224,11 +226,14 @@ export default class PseudoDocumentSheet extends foundry.applications.api.Handle
 		const pseudo = this.pseudoDocument!;
 		const id = event.button === 2 ? pseudo.id : pseudo.uuid;
 		const type = event.button === 2 ? "id" : "uuid";
-		const label =
-			game.i18n?.localize(`DOCUMENT.${pseudo.documentName}`) ?? "";
+		const label = game.i18n?.localize(`DOCUMENT.${pseudo.documentName}`) ?? "";
 		game.clipboard?.copyPlainText(id);
 		ui.notifications?.info("DOCUMENT.IdCopiedClipboard", {
 			format: { label, type, id },
 		});
 	}
 }
+
+/* ---------------------------------------- */
+
+export { PseudoDocumentSheet };

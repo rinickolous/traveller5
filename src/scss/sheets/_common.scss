@@ -1,0 +1,44 @@
+.traveller {
+	.flexrow,
+	.flexcol {
+		gap: 0.25rem;
+	}
+
+	div.form-group {
+		background-color: var(--color-input-bg);
+		border: 0.1rem solid var(--color-border);
+
+		label {
+			font-size: var(--font-size-12);
+			color: var(--color-input-label);
+			margin-left: 0.25rem;
+		}
+
+		div.form-fields {
+			display: flex;
+			flex-direction: row;
+
+			font-size: var(--font-size-16);
+
+			select,
+			input[type="text"],
+			input[type="number"] {
+				color: var(--color-input-fg);
+				height: 1.25rem;
+				border: none;
+				background: none;
+				box-shadow: none;
+
+				&:focus {
+					// Transparent due to annoying transition outline animation.
+					outline: 1px solid transparent;
+				}
+			}
+
+			label.inline {
+				text-align: end;
+				padding: 0 0.5rem;
+			}
+		}
+	}
+}

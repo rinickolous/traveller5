@@ -1,0 +1,87 @@
+<section class="tab {{tab.cssClass}}" data-group="primary" data-tab="actions">
+	<div class="flexrow">
+		<table class="attack-table">
+			<thead>
+				<tr>
+					<th>Weapon</th>
+					<th>Attack</th>
+					<th>Damage</th>
+				</tr>
+			</thead>
+			<tbody>
+				{{#each attacks}}
+					<tr data-action-id="{{this._id}}">
+						<td>{{this.item.name}}</td>
+						<td>{{this.name}}</td>
+						<td>{{this.damageText}}</td>
+					</tr>
+				{{/each}}
+			</tbody>
+		</table>
+		<table calss="armor-table">
+			<thead>
+				<tr>
+					<th>Armor</th>
+					<th>Mass</th>
+					<th>Ar</th>
+					<th>Ca</th>
+					<th>Fl</th>
+					<th>Ra</th>
+					<th>So</th>
+					<th>Ps</th>
+					<th>In</th>
+					<th>Se</th>
+					<th>Notes</th>
+				</tr>
+			</thead>
+			<tbody>
+				{{#each armors}}
+					<tr data-item-id="{{this._id}}">
+						<td>{{this.name}}</td>
+						<td>{{this.mass}}</td>
+						<td>{{this.protection.armor}}</td>
+						<td>{{this.protection.cage}}</td>
+						<td>{{this.protection.flashProof}}</td>
+						<td>{{this.protection.radProof}}</td>
+						<td>{{this.protection.soundProof}}</td>
+						<td>{{this.protection.psiShield}}</td>
+						<td>{{this.protection.insulated}}</td>
+						<td>{{this.protection.sealed}}</td>
+						<td>{{this.notes}}</td>
+					</tr>
+				{{/each}}
+			</tbody>
+		</table>
+		<table calss="skill-table">
+			<thead>
+				<tr>
+					<th>Skill/Knowledge </th>
+					<th>Level</th>
+					<th>{{#unless isPlay}}
+							<button data-action="addSkill">
+								<i class="fa-solid fa-plus"></i>
+							</button>
+						{{/unless}}
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				{{#each system.skills}}
+					<tr data-skill-id="{{this._id}}">
+						<td>{{this.name}}</td>
+						<td>{{this.level}}</td>
+						<td>{{#unless @root.isPlay}}
+								<button data-action="editSkill">
+									<i class="fa-solid fa-pen-to-square"></i>
+								</button>
+								<button data-action="removeSkill">
+									<i class="fa-solid fa-trash"></i>
+								</button>
+							{{/unless}}
+						</td>
+					</tr>
+				{{/each}}
+			</tbody>
+		</table>
+	</div>
+</section>

@@ -1,0 +1,35 @@
+@use "../mixins/sheets";
+
+/* ---------------------------------------- */
+
+.traveller.actor.character {
+	border-radius: 0;
+
+	header.window-header {
+		background: #cc2233;
+		color: white;
+
+		button {
+			background: black;
+			padding: 0.2rem;
+			border: 0.1rem solid white;
+			border-radius: 0;
+			color: white;
+		}
+	}
+
+	background: var(--color-base);
+	box-shadow: 0 0 0.5rem var(--color-lowlight);
+
+	header.sheet-header {
+		display: flex;
+		flex-direction: row;
+		gap: 0.25rem;
+
+		img.profile-img {
+			max-height: 8rem;
+			aspect-ratio: 1 / 1;
+			border: 0.1rem solid black;
+		}
+	}
+}

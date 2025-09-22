@@ -1,5 +1,5 @@
 import * as applications from "@applications";
-import { TRAVELLER } from "@config";
+import * as config from "@config";
 import * as T5_CONST from "@const";
 import * as data from "@data";
 import * as documents from "@documents";
@@ -8,39 +8,73 @@ import * as utils from "@utils";
 
 import "./traveller5.scss";
 
-const travellerAPI: TravellerGame = {
+(globalThis as any).traveller = {
 	data,
 	documents,
 	applications,
 	helpers,
 	utils,
+	config,
 	CONST: T5_CONST,
-	CONFIG: TRAVELLER,
-};
+} as TravellerGame;
 
-(globalThis as any).traveller = travellerAPI;
-
-(globalThis as any).tu = travellerAPI.utils;
+(globalThis as any).tu = traveller.utils;
 
 /* ---------------------------------------- */
 
 Hooks.once("init", () => {
 	tu.Logger.info(`Initializing Traveller 5 System`);
-	tu.Logger.info(TRAVELLER.ASCII);
+	console.log(T5_CONST.ASCII);
 
-	CONFIG.TRAVELLER = TRAVELLER;
+	(globalThis as any).traveller = game.traveller = Object.assign(
+		game.system as System,
+		(globalThis as any).traveller as TravellerGame
+	);
+
+	CONFIG.TRAVELLER = config;
 	helpers.TravellerSettingsHandler.registerSettings();
 
-	foundry.utils.deepFreeze(CONFIG.TRAVELLER.CONST);
-	(game as Game).traveller = travellerAPI;
+	// Assign document classes
+	for (const documentClass of Object.values(documents)) {
+		if (!foundry.utils.isSubclass(documentClass, foundry.abstract.Document)) continue;
+		CONFIG[documentClass.documentName].documentClass = documentClass;
+	}
 
-	// Register Document classes
-	CONFIG.Actor.documentClass = documents.T5Actor;
-	CONFIG.Item.documentClass = documents.T5Item;
+	helpers.registerHandlebars();
+
+	const templates: string[] = [].map((t) => T5_CONST.systemPath(t));
+
+	// Assign data models
+	for (const [doc, models] of Object.entries(data)) {
+		// @ts-expect-error: Not detecting as valid key but that's ok. Ignore.
+		if (!CONST.ALL_DOCUMENT_TYPES.includes(doc)) continue;
+		for (const modelCls of Object.values(models)) {
+			// @ts-expect-error: Not detecting as valid key but that's ok. Ignore.
+			if (modelCls.metadata?.type) CONFIG[doc].dataModels[modelCls.metadata.type] = modelCls;
+			// @ts-expect-error: Not detecting as valid key but that's ok. Ignore.
+			if (modelCls.metadata?.icon) CONFIG[doc].typeIcons[modelCls.metadata.type] = modelCls.metadata.icon;
+
+			if (modelCls.metadata?.detailsPartial) templates.push(...modelCls.metadata.detailsPartial);
+		}
+	}
+
+	foundry.applications.handlebars.loadTemplates(templates);
+
+	// Register sheet application classes
+	foundry.documents.collections.Actors.registerSheet(T5_CONST.SYSTEM_ID, applications.sheets.T5CharacterSheet, {
+		types: [T5_CONST.ACTOR_TYPES.CHARACTER],
+		makeDefault: true,
+		label: "TRAVELLER.SHEET.Labels.Character",
+	});
+
+	foundry.documents.collections.Items.registerSheet(T5_CONST.SYSTEM_ID, applications.sheets.T5EquipmentSheet, {
+		types: [T5_CONST.ITEM_TYPES.ARMOR, T5_CONST.ITEM_TYPES.WEAPON],
+		makeDefault: true,
+		label: "TRAVELLER.SHEET.Labels.Equipment",
+	});
 });
 
 /* ---------------------------------------- */
 
-Hooks.once("ready", async () => {
-	await data.migrations.migrateWorld();
-});
+Hooks.once("ready", async () => {});
+await data.migrations.migrateWorld();

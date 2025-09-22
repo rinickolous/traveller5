@@ -5,7 +5,7 @@
 	"keywords": [
 		"fvtt",
 		"traveller",
-		"5",
+		"traveller5",
 		"foundry",
 		"vtt",
 		"rpg"
@@ -22,16 +22,19 @@
 	"author": "Mikolaj Tomczynski",
 	"type": "module",
 	"scripts": {
-		"build": "npm run clean && vite build",
+		"build": "npm run clean && npm run pack && vite build",
 		"clean": "tsx ./build/clean.ts",
 		"hot": "vite serve",
 		"link": "tsx ./build/link-foundry.ts",
 		"lint": "eslint . --ext .ts",
 		"lint:fix": "eslint . --ext .ts --fix",
+		"pack": "node ./build/pack.js",
 		"test": "jest",
-		"watch": "npm run clean && vite build --watch --mode development"
+		"unpack": "node ./build/unpack.js",
+		"watch": "npm run clean && npm run pack && vite build --watch --mode development"
 	},
 	"devDependencies": {
+		"@foundryvtt/foundryvtt-cli": "^3.0.0",
 		"@trivago/prettier-plugin-sort-imports": "^5.2.2",
 		"@types/fs-extra": "^11.0.4",
 		"@types/node": "^24.3.0",

@@ -1,1 +1,2 @@
-export { Characteristic } from "./characteristic.ts";
+export * from "./characteristic.ts";
+export * from "./senses.ts";

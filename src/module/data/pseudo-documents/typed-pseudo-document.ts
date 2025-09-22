@@ -2,6 +2,8 @@ import fields = foundry.data.fields;
 import DataModel = foundry.abstract.DataModel;
 import Document = foundry.abstract.Document;
 
+import { PSEUDO_DOCUMENT_NAMES } from "@const";
+import { GetKey } from "fvtt-types/utils";
 import { PseudoDocument } from "./pseudo-document.ts";
 
 const typedPseudoDocumentSchema = (self: DataModel.AnyConstructor) => {
@@ -17,8 +19,24 @@ const typedPseudoDocumentSchema = (self: DataModel.AnyConstructor) => {
 /* ---------------------------------------- */
 
 namespace TypedPseudoDocument {
-	export type Schema = ReturnType<typeof PseudoDocument.defineSchema> &
-		ReturnType<typeof typedPseudoDocumentSchema>;
+	export type Schema = ReturnType<typeof PseudoDocument.defineSchema> & ReturnType<typeof typedPseudoDocumentSchema>;
+
+	/* ---------------------------------------- */
+
+	export type Name = PSEUDO_DOCUMENT_NAMES;
+
+	/* ---------------------------------------- */
+
+	export type SubTypesOf<_Name extends Name> = string & keyof TravellerConfig[_Name];
+
+	/* ---------------------------------------- */
+
+	export type OfType<_Name extends Name, SubType extends string> =
+		GetKey<TravellerConfig, _Name, {}> extends Record<string, { documentClass: new (...args: any) => infer Model }>
+			? SubType extends keyof GetKey<TravellerConfig, _Name, {}>
+				? Model
+				: never
+			: never;
 }
 
 /* ---------------------------------------- */
@@ -28,10 +46,7 @@ class TypedPseudoDocument<
 	Parent extends DataModel.Any = DataModel.Any,
 > extends PseudoDocument<Schema, Parent> {
 	static override defineSchema() {
-		return Object.assign(
-			super.defineSchema(),
-			typedPseudoDocumentSchema(this)
-		);
+		return Object.assign(super.defineSchema(), typedPseudoDocumentSchema(this));
 	}
 
 	/* ---------------------------------------- */
@@ -51,20 +66,14 @@ class TypedPseudoDocument<
 	 */
 	static get TYPES(): Record<string, typeof TypedPseudoDocument> {
 		return Object.values(
-			(traveller.CONFIG as any)[this.metadata.documentName] as Record<
+			(traveller.config as any)[this.metadata.documentName] as Record<
 				string,
 				{ documentClass: typeof TypedPseudoDocument }
 			>
-		).reduce(
-			(
-				acc: Record<string, typeof TypedPseudoDocument>,
-				{ documentClass }
-			) => {
-				if (documentClass.TYPE) acc[documentClass.TYPE] = documentClass;
-				return acc;
-			},
-			{}
-		);
+		).reduce((acc: Record<string, typeof TypedPseudoDocument>, { documentClass }) => {
+			if (documentClass.TYPE) acc[documentClass.TYPE] = documentClass;
+			return acc;
+		}, {});
 	}
 
 	/* ---------------------------------------- */
@@ -73,20 +82,14 @@ class TypedPseudoDocument<
 	 * The localized label for this typed pseudodocument's type.
 	 */
 	get typeLabel(): string {
-		return (traveller.CONFIG as any)[this.metadata.documentName][this.type]
-			.label;
+		return (traveller.config as any)[this.metadata.documentName][this.type].label;
 	}
 
 	/* ---------------------------------------- */
 
-	static override async create<
-		Schema extends TypedPseudoDocument.Schema = TypedPseudoDocument.Schema,
-	>(
+	static override async create<Schema extends TypedPseudoDocument.Schema = TypedPseudoDocument.Schema>(
 		data: DataModel.CreateData<Schema>,
-		{
-			parent,
-			...operation
-		}: Partial<foundry.abstract.types.DatabaseCreateOperation>
+		{ parent, ...operation }: Partial<foundry.abstract.types.DatabaseCreateOperation>
 	): Promise<Document.Any | undefined> {
 		data = foundry.utils.deepClone(data);
 		// @ts-expect-error: Types currently broken

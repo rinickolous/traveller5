@@ -1,4 +1,9 @@
 export * as Actor from "./actor/index.ts";
+export * as Combat from "./combat/index.ts";
+export * as Combatant from "./combatant/index.ts";
+export * as fields from "./fields/index.ts";
 export * as Item from "./item/index.ts";
+export * as JournalEntryPage from "./journal-entry-page/index.ts";
 export * as migrations from "./migrations.ts";
+export * as models from "./models/index.ts";
 export * as pseudoDocuments from "./pseudo-documents/index.ts";

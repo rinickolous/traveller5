@@ -1,0 +1,36 @@
+{{! Sheet Header }}
+<header class="sheet-header">
+	<img
+		class="profile-img"
+		src="{{document.img}}"
+		alt="{{document.name}}"
+		data-action="{{ifThen isPlay 'showPortraitArtwork' 'editImage'}}"
+		data-edit="img"
+		title="{{document.name}}"
+	/>
+	<div class="core-info flexcol">
+		{{formGroup fields.name name="name" value=document._source.name placeholder="NAME"}}
+		{{formGroup systemFields.profile.fields.title value=system.profile.title placeholder="TITLE"}}
+		<div class="flexrow">
+			{{#each system.characteristics as |char key|}}
+				{{#if (and (not (eq key "cs")) (not (eq key "cp")))}}
+					<div class="form-group">
+						<label>{{char.abbreviation}}</label>
+						<!-- <div class="value">{{char.value}}</div> -->
+						<div class="form-fields">
+							{{#if @root.isPlay}}
+								<input type="text" value="{{ehex char.value}}" disabled />
+							{{else}}
+								{{formInput
+									char.schema.fields.value
+									name=(concat "system.characteristics." char.schema.fields.value.fieldPath)
+									value=char.value
+								}}
+							{{/if}}
+						</div>
+					</div>
+				{{/if}}
+			{{/each}}
+		</div>
+	</div>
+</header>

@@ -4,7 +4,7 @@ const config: Config = {
 	singleQuote: false, // Use double quotes
 	useTabs: true, // Use tabs instead of spaces
 	tabWidth: 4, // This is ignored when useTabs = true
-	printWidth: 80, // 80 character line width
+	printWidth: 120, // 120 character line width
 	semi: true, // Always add semicolons
 	trailingComma: "es5", // Consistent trailing commas where valid in ES5
 	arrowParens: "always", // Always wrap arrow function params

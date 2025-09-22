@@ -1,4 +1,5 @@
 const EHEX: Record<string, number> = {
+	0: 0,
 	1: 1,
 	2: 2,
 	3: 3,
@@ -38,7 +39,7 @@ const EHEX: Record<string, number> = {
 
 export function fromNumber(value: string | number | null): string {
 	if (typeof value === "number") {
-		if (value < 1 || value > 33) return "?";
+		if (value < 0 || value > 33) return "?";
 		return Object.keys(EHEX).find((key) => EHEX[key] === value) || "";
 	} else if (typeof value === "string") {
 		value = value.toUpperCase();

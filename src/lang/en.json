@@ -1,15 +1,375 @@
 {
+	"DOCUMENT": {
+		"Action": "Action",
+		"Skill": "Skill"
+	},
+	"TYPES": {
+		"Actor": {
+			"character": "Character",
+			"starship": "Starship"
+		},
+		"Item": {
+			"species": "Species",
+			"weapon": "Weapon",
+			"armor": "Armor"
+		},
+		"JournalEntryPage": {
+			"planet": "Planet"
+		},
+		"Action": {
+			"attack": "Attack"
+		},
+		"Skill": {
+			"intuition": "Intuition",
+			"knowledge": "Knowledge",
+			"skill": "Skill",
+			"talent": "Talent"
+		}
+	},
 	"USER": {
 		"RoleAssistant": "Assistant Referee",
 		"RoleGamemaster": "Referee"
 	},
 	"TRAVELLER": {
+		"Mass": {
+			"Kilograms": "Kg"
+		},
+		"Currency": {
+			"Credits": "Cr",
+			"Megacredits": "MCr"
+		},
+		"COMPENDIUM": {
+			"species": "Species of the Third Imperium"
+		},
 		"Setting": {
 			"MigrationVersion": {
 				"Label": "Migration Version",
 				"Hint": "Last Performed Migration",
 				"WorldWarning": "Applying migrations for version {version}",
 				"WorldSuccess": "Successfully applied migrations for version {version}"
+			}
+		},
+		"PSEUDO": {
+			"FIELDS": {
+				"name": {
+					"label": "Name"
+				},
+				"type": {
+					"label": "Type"
+				}
+			}
+		},
+		"SKILL": {
+			"FIELDS": {
+				"level": {
+					"label": "Level"
+				}
+			}
+		},
+		"DAMAGE": {
+			"Type": {
+				"Corrode": { "Name": "Corrode", "Abbreviation": "A" },
+				"Bullet": { "Name": "Bullet", "Abbreviation": "B" },
+				"Slash": { "Name": "Slash", "Abbreviation": "C" },
+				"Blast": { "Name": "Blast", "Abbreviation": "D" },
+				"Blow": { "Name": "Blow", "Abbreviation": "D" },
+				"EMP": { "Name": "EMP", "Abbreviation": "E" },
+				"Frag": { "Name": "Frag", "Abbreviation": "F" },
+				"Gas": { "Name": "Gas", "Abbreviation": "G" },
+				"Hot": { "Name": "Hot", "Abbreviation": "H" },
+				"Infection": { "Name": "Infection", "Abbreviation": "I" },
+				"Psi": { "Name": "Psi", "Abbreviation": "J" },
+				"Burn": { "Name": "Burn", "Abbreviation": "K" },
+				"Elec": { "Name": "Elec", "Abbreviation": "L" },
+				"Magnetic": { "Name": "Magnetic", "Abbreviation": "M" },
+				"Stench": { "Name": "Stench", "Abbreviation": "O" },
+				"Pain": { "Name": "Pain", "Abbreviation": "P" },
+				"Cold": { "Name": "Cold", "Abbreviation": "Q" },
+				"Rad": { "Name": "Rad", "Abbreviation": "R" },
+				"Sound": { "Name": "Sound", "Abbreviation": "S" },
+				"Poison": { "Name": "Poison", "Abbreviation": "T" },
+				"Flash": { "Name": "Flash", "Abbreviation": "U" },
+				"Vacc": { "Name": "Vacc", "Abbreviation": "V" },
+				"Wound": { "Name": "Wound", "Abbreviation": "W" },
+				"Pen": { "Name": "Pen", "Abbreviation": "X" },
+				"Grav": { "Name": "Grav", "Abbreviation": "Y" },
+				"Tranq": { "Name": "Tranq", "Abbreviation": "Z" }
+			},
+			"Effect": {
+				"hit": { "Name": "Hit" },
+				"cut": { "Name": "Cut" },
+				"fry": { "Name": "Fry" },
+				"suff": { "Name": "Suff" },
+				"heat": { "Name": "Heat" },
+				"stun": { "Name": "Stun" },
+				"freeze": { "Name": "Freeze" },
+				"blind": { "Name": "Blind" }
+			}
+		},
+		"Actor": {
+			"character": {
+				"FIELDS": {
+					"profile": {
+						"title": {
+							"label": "Title"
+						},
+						"gender": {
+							"label": "Gender"
+						}
+					}
+				},
+				"Tabs": {
+					"actions": "Actions"
+				}
+			}
+		},
+		"Item": {
+			"Tabs": {
+				"description": "Description",
+				"details": "Details"
+			},
+			"equipment": {
+				"FIELDS": {
+					"quality": { "label": "Q" },
+					"reliability": { "label": "R" },
+					"easeOfUse": { "label": "E" },
+					"bulk": { "label": "B" },
+					"safety": { "label": "S" },
+					"cost": { "label": "Cost" },
+					"mass": { "label": "Mass" }
+				}
+			},
+			"armor": {
+				"FIELDS": {
+					"Stage": { "label": "Stage" },
+					"Burden": { "label": "Burden" },
+					"Descriptor": { "label": "Descriptor" },
+					"Type": { "label": "Type" },
+					"User": { "label": "User" },
+					"Protection": { "label": "Protection" }
+				},
+				"Stage": {
+					"Experimental": { "Name": "Experimental", "Abbreviation": "X" },
+					"Prototype": { "Name": "Prototype", "Abbreviation": "P" },
+					"Early": { "Name": "Early", "Abbreviation": "E" },
+					"Basic": { "Name": "Basic", "Abbreviation": "B" },
+					"Blank": { "Name": "(blank)", "Abbreviation": "" },
+					"Standard": { "Name": "Standard", "Abbreviation": "St" },
+					"Improved": { "Name": "Improved", "Abbreviation": "Im" },
+					"Modified": { "Name": "Modified", "Abbreviation": "Mod" },
+					"Advanced": { "Name": "Advanced", "Abbreviation": "A" },
+					"Obsolete": { "Name": "Obsolete", "Abbreviation": "Ob" },
+					"Alternate": { "Name": "Alternate", "Abbreviation": "Alt" }
+				},
+				"Burden": {
+					"Vlight": { "Name": "Vlight", "Abbreviation": "Vl" },
+					"Light": { "Name": "Light", "Abbreviation": "L" },
+					"Blank": { "Name": "(blank)", "Abbreviation": "" },
+					"Medium": { "Name": "Medium", "Abbreviation": "M" },
+					"Heavy": { "Name": "Heavy", "Abbreviation": "H" },
+					"Disposable": { "Name": "Disposable", "Abbreviation": "D" },
+					"Oversize": { "Name": "Oversize", "Abbreviation": "OS" },
+					"Titan": { "Name": "Titan", "Abbreviation": "T" }
+				},
+				"Descriptor": {
+					"Assault": { "Name": "Assault", "Abbreviation": "A" },
+					"Battle": { "Name": "Battle", "Abbreviation": "B" },
+					"Combat": { "Name": "Combat", "Abbreviation": "C" },
+					"Drop": { "Name": "Drop", "Abbreviation": "Dr" },
+					"Boarding": { "Name": "Boarding", "Abbreviation": "Bd" },
+					"Police": { "Name": "Police", "Abbreviation": "P" },
+					"Protected": { "Name": "Protected", "Abbreviation": "Pr" },
+					"HostileEnviron": { "Name": "HostileEnviron", "Abbreviation": "He" },
+					"Hazmat": { "Name": "Hazmat", "Abbreviation": "Hz" },
+					"Environ": { "Name": "Environ", "Abbreviation": "Env" },
+					"Vacc": { "Name": "Vacc", "Abbreviation": "V" },
+					"Hot": { "Name": "Hot", "Abbreviation": "H" },
+					"Cold": { "Name": "Cold", "Abbreviation": "C" },
+					"Exploration": { "Name": "Exploration", "Abbreviation": "Ex" },
+					"Prospector": { "Name": "Prospector", "Abbreviation": "Pr" },
+					"Labor": { "Name": "Labor", "Abbreviation": "L" },
+					"WeaponCarrier": { "Name": "WeaponCarrier", "Abbreviation": "C" },
+					"Sapper": { "Name": "Sapper", "Abbreviation": "S" }
+				},
+				"Type": {
+					"Dress": { "Name": "Dress", "Abbreviation": "D" },
+					"Armor": { "Name": "Armor", "Abbreviation": "A" },
+					"Suit": { "Name": "Suit", "Abbreviation": "S" },
+					"Unit": { "Name": "Unit", "Abbreviation": "U" },
+					"Item": { "Name": "Item", "Abbreviation": "I" }
+				},
+				"User": {
+					"Blank": { "Name": "(blank)", "Abbreviation": "" },
+					"Man": { "Name": "Man", "Abbreviation": "M" },
+					"Vargr": { "Name": "Vargr", "Abbreviation": "V" },
+					"Aslan": { "Name": "Aslan", "Abbreviation": "A" },
+					"Kkree": { "Name": "Kkree", "Abbreviation": "K" },
+					"Hiver": { "Name": "Hiver", "Abbreviation": "H" },
+					"Droyne": { "Name": "Droyne", "Abbreviation": "D" },
+					"Vegan": { "Name": "Vegan", "Abbreviation": "T" },
+					"Hand": { "Name": "Hand", "Abbreviation": "M" },
+					"Paw": { "Name": "Paw", "Abbreviation": "A" },
+					"Grasper": { "Name": "Grasper", "Abbreviation": "H" },
+					"Gripper": { "Name": "Gripper", "Abbreviation": "G" },
+					"Tentacle": { "Name": "Tentacle", "Abbreviation": "T" },
+					"Socket": { "Name": "Socket", "Abbreviation": "S" },
+					"Universal": { "Name": "Universal", "Abbreviation": "U" }
+				},
+				"Protection": {
+					"armor": { "Name": "armor", "Abbreviation": "Ar" },
+					"cage": { "Name": "cage", "Abbreviation": "Ca" },
+					"flashProof": { "Name": "flashProof", "Abbreviation": "Fl" },
+					"radProof": { "Name": "radProof", "Abbreviation": "Ra" },
+					"soundProof": { "Name": "soundProof", "Abbreviation": "So" },
+					"psiShield": { "Name": "psiShield", "Abbreviation": "Ps" },
+					"insulated": { "Name": "insulated", "Abbreviation": "In" },
+					"sealed": { "Name": "sealed", "Abbreviation": "Se" }
+				}
+			},
+			"weapon": {
+				"FIELDS": {
+					"stage": { "label": "Stage" },
+					"burden": { "label": "Burden" },
+					"descriptor": { "label": "Descriptor" },
+					"type": { "label": "Type" },
+					"user": { "label": "User" },
+					"portability": { "label": "Portability" },
+					"techLevel": { "label": "TL" }
+				},
+				"Stage": {
+					"Experimental": { "Name": "Experimental", "Abbreviation": "X" },
+					"Prototype": { "Name": "Prototype", "Abbreviation": "P" },
+					"Early": { "Name": "Early", "Abbreviation": "E" },
+					"Basic": { "Name": "Basic", "Abbreviation": "B" },
+					"Blank": { "Name": "(blank)", "Abbreviation": "" },
+					"Standard": { "Name": "Standard", "Abbreviation": "Std" },
+					"Improved": { "Name": "Improved", "Abbreviation": "Im" },
+					"Modified": { "Name": "Modified", "Abbreviation": "Mod" },
+					"Advanced": { "Name": "Advanced", "Abbreviation": "A" },
+					"Obsolete": { "Name": "Obsolete", "Abbreviation": "Ob" },
+					"Precision": { "Name": "Precision", "Abbreviation": "Pr" },
+					"Remote": { "Name": "Remote", "Abbreviation": "R" },
+					"Sniper": { "Name": "Sniper", "Abbreviation": "S" },
+					"Target": { "Name": "Target", "Abbreviation": "T" },
+					"Ultimate": { "Name": "Ultimate", "Abbreviation": "U" }
+				},
+				"Burden": {
+					"Body": { "Name": "Body", "Abbreviation": "B" },
+					"Vlight": { "Name": "Vlight", "Abbreviation": "Vl" },
+					"Light": { "Name": "Light", "Abbreviation": "L" },
+					"Snub": { "Name": "Snub", "Abbreviation": "Sn" },
+					"Blank": { "Name": "(blank)", "Abbreviation": "" },
+					"Medium": { "Name": "Medium", "Abbreviation": "M" },
+					"Magnum": { "Name": "Magnum", "Abbreviation": "M" },
+					"Heavy": { "Name": "Heavy", "Abbreviation": "H" },
+					"Vheavy": { "Name": "Vheavy", "Abbreviation": "Vh" },
+					"VRF": { "Name": "VRF", "Abbreviation": "Vrf" },
+					"Recoilless": { "Name": "Recoilless", "Abbreviation": "R" },
+					"Disposable": { "Name": "Disposable", "Abbreviation": "D" }
+				},
+				"Descriptor": {
+					"Acceleractor": { "Name": "Acceleractor", "Abbreviation": "Ac" },
+					"Acid": { "Name": "Acid", "Abbreviation": "A" },
+					"AntiFlyer": { "Name": "AntiFlyer", "Abbreviation": "aF" },
+					"AntiTank": { "Name": "AntiTank", "Abbreviation": "aT" },
+					"Assault": { "Name": "Assault", "Abbreviation": "A" },
+					"Battle": { "Name": "Battle", "Abbreviation": "B" },
+					"Blank": { "Name": "(blank)", "Abbreviation": "" },
+					"Combat": { "Name": "Combat", "Abbreviation": "C" },
+					"Dart": { "Name": "Dart", "Abbreviation": "D" },
+					"EMP": { "Name": "EMP", "Abbreviation": "Emp" },
+					"Fire": { "Name": "Fire", "Abbreviation": "H" },
+					"Flash": { "Name": "Flash", "Abbreviation": "F" },
+					"Freeze": { "Name": "Freeze", "Abbreviation": "C" },
+					"Fusion": { "Name": "Fusion", "Abbreviation": "F" },
+					"Gas": { "Name": "Gas", "Abbreviation": "P" },
+					"Gauss": { "Name": "Gauss", "Abbreviation": "G" },
+					"Grav": { "Name": "Grav", "Abbreviation": "G" },
+					"Grenade": { "Name": "Grenade", "Abbreviation": "G" },
+					"Hunting": { "Name": "Hunting", "Abbreviation": "H" },
+					"Laser": { "Name": "Laser", "Abbreviation": "L" },
+					"Machine": { "Name": "Machine", "Abbreviation": "M" },
+					"Mag": { "Name": "Mag", "Abbreviation": "M" },
+					"Missile": { "Name": "Missile", "Abbreviation": "M" },
+					"Plasma": { "Name": "Plasma", "Abbreviation": "P" },
+					"PsiAmp": { "Name": "PsiAmp", "Abbreviation": "Psi" },
+					"RAM": { "Name": "RAM Grenade", "Abbreviation": "RAM" },
+					"Rad": { "Name": "Rad", "Abbreviation": "R" },
+					"Rocket": { "Name": "Rocket", "Abbreviation": "R" },
+					"Shock": { "Name": "Shock", "Abbreviation": "Sh" },
+					"Sonic": { "Name": "Sonic", "Abbreviation": "S" },
+					"Splat": { "Name": "Splat", "Abbreviation": "Sp" },
+					"Stench": { "Name": "Stench", "Abbreviation": "S" },
+					"Sub": { "Name": "Sub", "Abbreviation": "S" },
+					"Survival": { "Name": "Survival", "Abbreviation": "S" }
+				},
+				"Type": {
+					"Gun": { "Name": "Gun", "Abbreviation": "G" },
+					"Gatling": { "Name": "Gatling", "Abbreviation": "Ga" },
+					"Cannon": { "Name": "Cannon", "Abbreviation": "C" },
+					"AutoCannon": { "Name": "AutoCannon", "Abbreviation": "aC" },
+					"Rifle": { "Name": "Rifle", "Abbreviation": "R" },
+					"Carbine": { "Name": "Carbine", "Abbreviation": "C" },
+					"Pistol": { "Name": "Pistol", "Abbreviation": "P" },
+					"Revolver": { "Name": "Revolver", "Abbreviation": "Re" },
+					"Shotgun": { "Name": "Shotgun", "Abbreviation": "S" },
+					"Machinegun": { "Name": "Machinegun", "Abbreviation": "Mg" },
+					"Projector": { "Name": "Projector", "Abbreviation": "Pj" },
+					"Designator": { "Name": "Designator", "Abbreviation": "D" },
+					"Launcher": { "Name": "Launcher", "Abbreviation": "L" },
+					"MultiLauncher": { "Name": "MultiLauncher", "Abbreviation": "mL" }
+				},
+				"User": {
+					"Blank": { "Name": "(blank)", "Abbreviation": "" },
+					"Man": { "Name": "Man", "Abbreviation": "M" },
+					"Vargr": { "Name": "Vargr", "Abbreviation": "V" },
+					"Aslan": { "Name": "Aslan", "Abbreviation": "A" },
+					"Kkree": { "Name": "Kkree", "Abbreviation": "K" },
+					"Hiver": { "Name": "Hiver", "Abbreviation": "H" },
+					"Droyne": { "Name": "Droyne", "Abbreviation": "D" },
+					"Vegan": { "Name": "Vegan", "Abbreviation": "T" },
+					"Hand": { "Name": "Hand", "Abbreviation": "M" },
+					"Paw": { "Name": "Paw", "Abbreviation": "A" },
+					"Grasper": { "Name": "Grasper", "Abbreviation": "H" },
+					"Gripper": { "Name": "Gripper", "Abbreviation": "G" },
+					"Tentacle": { "Name": "Tentacle", "Abbreviation": "T" },
+					"Socket": { "Name": "Socket", "Abbreviation": "S" },
+					"Universal": { "Name": "Universal", "Abbreviation": "U" }
+				},
+				"Portability": {
+					"Blank": { "Name": "(blank)", "Abbreviation": "" },
+					"Crewed": { "Name": "Crewed", "Abbreviation": "C" },
+					"Fixed": { "Name": "Fixed", "Abbreviation": "F" },
+					"Personal": { "Name": "Personal", "Abbreviation": "" },
+					"Portable": { "Name": "Portable", "Abbreviation": "P" },
+					"Turret": { "Name": "Turret", "Abbreviation": "T" },
+					"VehicleMount": { "Name": "VehicleMount", "Abbreviation": "V" }
+				}
+			}
+		},
+		"CHARACTERISTICS": {
+			"Strength": { "Name": "Strength", "Abbreviation": "Str", "Symbol": "S" },
+			"Dexterity": { "Name": "Dexterity", "Abbreviation": "Dex", "Symbol": "D" },
+			"Agility": { "Name": "Agility", "Abbreviation": "Agi", "Symbol": "A" },
+			"Grace": { "Name": "Grace", "Abbreviation": "Gra", "Symbol": "G" },
+			"Endurance": { "Name": "Endurance", "Abbreviation": "End", "Symbol": "E" },
+			"Vigor": { "Name": "Vigor", "Abbreviation": "Vig", "Symbol": "V" },
+			"Stamina": { "Name": "Stamina", "Abbreviation": "Sta", "Symbol": "S" },
+			"Intelligence": { "Name": "Intelligence", "Abbreviation": "Int", "Symbol": "I" },
+			"Education": { "Name": "Education", "Abbreviation": "Edu", "Symbol": "E" },
+			"Training": { "Name": "Training", "Abbreviation": "Tra", "Symbol": "T" },
+			"Instinct": { "Name": "Instinct", "Abbreviation": "Ins", "Symbol": "I" },
+			"SocialStanding": { "Name": "Social Standing", "Abbreviation": "Soc", "Symbol": "S" },
+			"Charisma": { "Name": "Charisma", "Abbreviation": "Cha", "Symbol": "C" },
+			"Caste": { "Name": "Caste", "Abbreviation": "Cas", "Symbol": "K" },
+			"Psionics": { "Name": "Psionics", "Abbreviation": "Psi", "Symbol": "P" },
+			"Sanity": { "Name": "Sanity", "Abbreviation": "San", "Symbol": "S" }
+		},
+		"SHEET": {
+			"ToggleMode": "Toggle Play/Edit Mode",
+			"Labels": {
+				"Character": "Traveller 5 Character Record",
+				"Equipment": "Traveller 5 Equipment Record"
 			}
 		}
 	}

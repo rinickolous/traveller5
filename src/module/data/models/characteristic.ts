@@ -1,54 +1,62 @@
 import { CHARACTERISTICS } from "@const";
+import { AnyObject } from "fvtt-types/utils";
 import fields = foundry.data.fields;
 
 /* ---------------------------------------- */
 
-class Characteristics extends foundry.abstract
-	.DataModel<CharacteristicsSchema> {
+class Characteristics extends foundry.abstract.DataModel<CharacteristicsSchema, t5.data.Actor.CharacterModel> {
 	static override defineSchema(): CharacteristicsSchema {
 		return characteristicsSchema();
 	}
 
 	/* ---------------------------------------- */
 
-	get(type: CHARACTERISTICS): Characteristic | null {
-		switch (type) {
-			case CHARACTERISTICS.Strength:
-				return this.c1;
-			case CHARACTERISTICS.Dexterity:
-				return this.c2;
-			case CHARACTERISTICS.Agility:
-				return this.c2;
-			case CHARACTERISTICS.Grace:
-				return this.c2;
-			case CHARACTERISTICS.Endurance:
-				return this.c3;
-			case CHARACTERISTICS.Stamina:
-				return this.c3;
-			case CHARACTERISTICS.Vigor:
-				return this.c3;
-			case CHARACTERISTICS.Intelligence:
-				return this.c4;
-			case CHARACTERISTICS.Education:
-				return this.c5;
-			case CHARACTERISTICS.Training:
-				return this.c5;
-			case CHARACTERISTICS.Instinct:
-				return this.c5;
-			case CHARACTERISTICS.SocialStanding:
-				return this.c6;
-			case CHARACTERISTICS.Charisma:
-				return this.c6;
-			case CHARACTERISTICS.Caste:
-				return this.c6;
-			case CHARACTERISTICS.Sanity:
-				return this.cs;
-			case CHARACTERISTICS.Psionics:
-				return this.cp;
-			default:
-				tu.Logger.warn("Unknown characteristic type:" + type);
-				return null;
+	get actor(): t5.data.Actor.CharacterModel | null {
+		return this.parent;
+	}
+
+	/* ---------------------------------------- */
+	/*   Data Preparation                       */
+	/* ---------------------------------------- */
+
+	protected static _defaultTypeForFieldName(fieldName: keyof CharacteristicsSchema): CHARACTERISTICS {
+		return Object.entries(traveller.config.characteristicTypes).find(
+			([, value]) => value.position === fieldName && value.default
+		)![0] as CHARACTERISTICS;
+	}
+
+	/* ---------------------------------------- */
+
+	protected override _initialize(options?: foundry.abstract.DataModel.InitializeOptions & AnyObject): void {
+		super._initialize(options);
+		this._initializeType();
+	}
+
+	/* ---------------------------------------- */
+
+	protected _initializeType(): void {
+		const schema = (this.constructor as typeof Characteristics).schema;
+		const species = this.actor?.species;
+		if (!species) {
+			tu.Logger.warn(
+				`Characteristic has no parent actor or actor has no species. Falling back to default Characteristic types.`
+			);
+			for (const fieldName of Object.keys(schema.fields) as (keyof CharacteristicsSchema)[]) {
+				this[fieldName].type = Characteristics._defaultTypeForFieldName(fieldName);
+			}
+			return;
 		}
+
+		for (const fieldName of Object.keys(schema.fields) as (keyof CharacteristicsSchema)[]) {
+			this[fieldName].type = species.system.characteristics[fieldName]?.type as CHARACTERISTICS;
+		}
+	}
+
+	/* ---------------------------------------- */
+
+	get(type: CHARACTERISTICS): Characteristic | null {
+		const key = traveller.config.characteristicTypes[type];
+		return this[key.position];
 	}
 
 	get upp(): string {
@@ -60,30 +68,14 @@ class Characteristics extends foundry.abstract
 
 const characteristicsSchema = () => {
 	return {
-		c1: new fields.EmbeddedDataField(Characteristic, {
-			initial: { type: CHARACTERISTICS.Strength },
-		}),
-		c2: new fields.EmbeddedDataField(Characteristic, {
-			initial: { type: CHARACTERISTICS.Dexterity },
-		}),
-		c3: new fields.EmbeddedDataField(Characteristic, {
-			initial: { type: CHARACTERISTICS.Endurance },
-		}),
-		c4: new fields.EmbeddedDataField(Characteristic, {
-			initial: { type: CHARACTERISTICS.Intelligence },
-		}),
-		c5: new fields.EmbeddedDataField(Characteristic, {
-			initial: { type: CHARACTERISTICS.Education },
-		}),
-		c6: new fields.EmbeddedDataField(Characteristic, {
-			initial: { type: CHARACTERISTICS.SocialStanding },
-		}),
-		cs: new fields.EmbeddedDataField(Characteristic, {
-			initial: { type: CHARACTERISTICS.Sanity },
-		}),
-		cp: new fields.EmbeddedDataField(Characteristic, {
-			initial: { type: CHARACTERISTICS.Psionics },
-		}),
+		c1: new fields.EmbeddedDataField(Characteristic),
+		c2: new fields.EmbeddedDataField(Characteristic),
+		c3: new fields.EmbeddedDataField(Characteristic),
+		c4: new fields.EmbeddedDataField(Characteristic),
+		c5: new fields.EmbeddedDataField(Characteristic),
+		c6: new fields.EmbeddedDataField(Characteristic),
+		cs: new fields.EmbeddedDataField(Characteristic),
+		cp: new fields.EmbeddedDataField(Characteristic),
 	};
 };
 
@@ -91,97 +83,61 @@ type CharacteristicsSchema = ReturnType<typeof characteristicsSchema>;
 
 /* ---------------------------------------- */
 
-class Characteristic extends foundry.abstract.DataModel<CharacteristicSchema> {
+class Characteristic extends foundry.abstract.DataModel<CharacteristicSchema, Characteristics> {
+	declare type: CHARACTERISTICS;
+
 	static override defineSchema(): CharacteristicSchema {
 		return characteristicSchema();
 	}
 
 	/* ---------------------------------------- */
 
+	get actor(): t5.data.Actor.CharacterModel | null {
+		return this.parent?.parent;
+	}
+
+	/* ---------------------------------------- */
+
+	/* ---------------------------------------- */
+
 	get isGenetic(): boolean {
-		return [
-			CHARACTERISTICS.Strength,
-			CHARACTERISTICS.Dexterity,
-			CHARACTERISTICS.Agility,
-			CHARACTERISTICS.Grace,
-			CHARACTERISTICS.Endurance,
-			CHARACTERISTICS.Vigor,
-			CHARACTERISTICS.Stamina,
-			CHARACTERISTICS.Intelligence,
-		].includes(this.type as CHARACTERISTICS);
+		return traveller.config.characteristicTypes[this.type]?.genetic ?? false;
 	}
 
 	/* ---------------------------------------- */
 
 	get isPhysical(): boolean {
-		return [
-			CHARACTERISTICS.Strength,
-			CHARACTERISTICS.Dexterity,
-			CHARACTERISTICS.Agility,
-			CHARACTERISTICS.Grace,
-			CHARACTERISTICS.Endurance,
-			CHARACTERISTICS.Vigor,
-			CHARACTERISTICS.Stamina,
-		].includes(this.type as CHARACTERISTICS);
+		return traveller.config.characteristicTypes[this.type]?.physical ?? false;
+	}
+
+	/* ---------------------------------------- */
+
+	get name(): string {
+		return tu.i18n.localize(`TRAVELLER.CHARACTERISTICS.${this.type}.Name`);
+	}
+
+	/* ---------------------------------------- */
+
+	get abbreviation(): string {
+		return tu.i18n.localize(`TRAVELLER.CHARACTERISTICS.${this.type}.Abbreviation`);
 	}
 
 	/* ---------------------------------------- */
 
 	get symbol(): string {
-		switch (this.type) {
-			case CHARACTERISTICS.Strength:
-				return "S";
-			case CHARACTERISTICS.Dexterity:
-				return "D";
-			case CHARACTERISTICS.Agility:
-				return "A";
-			case CHARACTERISTICS.Grace:
-				return "G";
-			case CHARACTERISTICS.Endurance:
-				return "E";
-			case CHARACTERISTICS.Stamina:
-				return "S";
-			case CHARACTERISTICS.Vigor:
-				return "V";
-			case CHARACTERISTICS.Intelligence:
-				return "I";
-			case CHARACTERISTICS.Education:
-				return "E";
-			case CHARACTERISTICS.Training:
-				return "T";
-			case CHARACTERISTICS.Instinct:
-				return "I";
-			case CHARACTERISTICS.SocialStanding:
-				return "S";
-			case CHARACTERISTICS.Charisma:
-				return "C";
-			case CHARACTERISTICS.Caste:
-				return "C";
-			case CHARACTERISTICS.Sanity:
-				return "S";
-			case CHARACTERISTICS.Psionics:
-				return "P";
-			default:
-				tu.Logger.warn("Unknown characteristic type: " + this.type);
-				return "?";
-		}
+		return tu.i18n.localize(`TRAVELLER.CHARACTERISTICS.${this.type}.Symbol`);
 	}
 
 	/* ---------------------------------------- */
 
 	toString(): string {
-		if (!this.isGenerated) return "?";
-		if (this.isKnown || game.user?.isGM)
-			return traveller.utils.eHex.fromNumber(this.max);
-		return "?";
+		return traveller.utils.eHex.fromNumber(this.value);
 	}
 
 	current(): number {
-		if (!this.isGenerated) return 0;
-		if (!(this.isKnown || game.user?.isGM)) return 0;
-		if (!this.isPhysical) return this.max ?? 0;
+		if (!this.isPhysical) return this.value ?? 0;
 
-		return (this.max ?? 0) - (this.damage ?? 0);
+		return (this.value ?? 0) - (this.damage ?? 0);
 	}
 }
 
@@ -189,45 +145,26 @@ class Characteristic extends foundry.abstract.DataModel<CharacteristicSchema> {
 
 const characteristicSchema = () => {
 	return {
-		type: new fields.StringField({
-			required: true,
-			nullable: false,
-			choices: CHARACTERISTICS,
-		}),
-		formula: new fields.StringField({
-			required: true,
-			nullable: false,
-			initial: "2d6",
-		}),
-		genetic: new fields.NumberField({
+		// type: new fields.StringField({ required: true, nullable: false }),
+		geneticValue: new fields.NumberField({
 			required: true,
 			nullable: true,
 			initial: null,
 		}),
-		original: new fields.NumberField({
+		originalValue: new fields.NumberField({
 			required: true,
 			nullable: true,
 			initial: null,
 		}),
-		max: new fields.NumberField({
+		value: new traveller.data.fields.EHexField({
 			required: true,
 			nullable: true,
-			initial: null,
+			initial: 7,
 		}),
 		damage: new fields.NumberField({
 			required: true,
 			nullable: true,
 			initial: null,
-		}),
-		isGenerated: new fields.BooleanField({
-			required: true,
-			nullable: false,
-			initial: false,
-		}),
-		isKnown: new fields.BooleanField({
-			required: true,
-			nullable: false,
-			initial: true,
 		}),
 	};
 };
