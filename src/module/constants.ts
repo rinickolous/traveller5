@@ -92,6 +92,100 @@ export enum CHARACTERISTICS {
 /* ---------------------------------------- */
 
 /* ---------------------------------------- */
+/*   Equipment                              */
+/* ---------------------------------------- */
+
+export enum THING_FUNCTION {
+	Enhancer = "Enhancer",
+	Protector = "Protector",
+	Enabler = "Enabler",
+	Resolver = "Resolver",
+	Entangler = "Entangler",
+	Cultural = "Cultural",
+	Value = "Value",
+	Analog = "Analog",
+}
+
+/* ---------------------------------------- */
+
+export enum THING_PROFILE {
+	Cube = "Cube",
+	Sphere = "Sphere",
+	Cylinder = "Cylinder",
+	Disk = "Disk",
+	Rod = "Rod",
+	ThickSheet = "ThickSheet",
+	Slab = "Slab",
+	Pyramid = "Pyramid",
+	Vthick = "Vthick",
+	Thick = "Thick",
+	Typical = "Typical",
+	Thin = "Thin",
+	Vthin = "Vthin",
+	Flat = "Flat",
+	Vflat = "Vflat",
+	Sheet = "Sheet",
+	HeavyFabric = "HeavyFabric",
+	Fabric = "Fabric",
+	LightFabric = "LightFabric",
+	Custom = "Custom",
+}
+
+/* ---------------------------------------- */
+
+export enum THING_DENSITY {
+	Specials = "Specials",
+	Wood = "Wood",
+	Silanes = "Silanes",
+	Hydrocarbons = "Hydrocarbons",
+	Light = "Light",
+	Standard = "Standard",
+	Dense = "Dense",
+	Vdense = "Vdense",
+	Magnesium = "Magnesium",
+	Dirt = "Dirt",
+	Brick = "Brick",
+	Aluminium = "Aluminium",
+	Titanium = "Titanium",
+	Lanthanum = "Lanthanum",
+	Steel = "Steel",
+	Silver = "Silver",
+	Lead = "Lead",
+	Gold = "Gold",
+	Iridium = "Iridium",
+	Starstuff = "Starstuff",
+	Neutronium = "Neutronium",
+	Custom = "Custom",
+}
+
+/* ---------------------------------------- */
+
+export enum THING_CONSTRUCTION {
+	Flimsy = "Flimsy",
+	Container = "Container",
+	Textilfe = "Textilfe",
+	Foamed = "Foamed",
+	Hollow = "Hollow",
+	PointSix = "PointSix",
+	Lightened = "Lightened",
+	InternalMechanism = "InternalMechanism",
+	PointNine = "PointNine",
+	Solid = "Solid",
+	Custom = "Custom",
+}
+
+/* ---------------------------------------- */
+
+export enum THING_POWER_SUPPLY {
+	PowerCells = "PowerCells",
+	AmbientPanel = "AmbientPanel",
+	FuelCell = "FuelCell",
+	FusionPlus = "FusionPlus",
+	Generator = "Generator",
+	PlugIn = "PlugIn",
+}
+
+/* ---------------------------------------- */
 /*   Weapon                                 */
 /* ---------------------------------------- */
 

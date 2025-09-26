@@ -33,7 +33,7 @@ class T5Item<SubType extends Item.SubType = Item.SubType> extends Item<SubType> 
 	override getEmbeddedDocument<EmbeddedName extends Item.Embedded.CollectionName | string>(
 		embeddedName: EmbeddedName,
 		id: string,
-		{ invalid = false, strict = false }: Document.GetEmbeddedDocumentOptions
+		{ invalid, strict }: Document.GetEmbeddedDocumentOptions = { invalid: false, strict: false }
 	): EmbeddedName extends Item.Embedded.CollectionName
 		? Item.Embedded.DocumentFor<EmbeddedName> | undefined
 		: PseudoDocument | undefined {

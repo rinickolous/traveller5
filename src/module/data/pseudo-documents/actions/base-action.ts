@@ -6,7 +6,13 @@ import fields = foundry.data.fields;
 
 const baseActionSchema = () => {
 	return {
-		name: new fields.StringField({ required: true, default: "New Action" }),
+		name: new fields.StringField({ required: true, nullable: false, default: "Action" }),
+		img: new fields.FilePathField({
+			required: true,
+			nullable: false,
+			categories: ["IMAGE"],
+			initial: "icons/svg/walk.svg",
+		}),
 	};
 };
 
@@ -36,12 +42,14 @@ class BaseAction<Schema extends BaseAction.Schema = BaseAction.Schema> extends T
 
 	static override get metadata(): PseudoDocument.Metadata {
 		return {
+			...super.metadata,
 			documentName: PSEUDO_DOCUMENT_NAMES.ACTION,
-			label: "",
-			icon: "",
-			embedded: {},
 		};
 	}
+
+	/* ---------------------------------------- */
+
+	static override LOCALIZATION_PREFIXES = super.LOCALIZATION_PREFIXES.concat("TRAVELLER.ACTION");
 
 	/* ---------------------------------------- */
 

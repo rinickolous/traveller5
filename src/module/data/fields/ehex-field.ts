@@ -1,8 +1,8 @@
 import { SimpleMerge } from "fvtt-types/utils";
 import fields = foundry.data.fields;
 
-declare namespace EHexField {
-	type DefaultOptions = SimpleMerge<
+namespace EHexField {
+	export type DefaultOptions = SimpleMerge<
 		fields.DataField.DefaultOptions,
 		{
 			nullable: false;

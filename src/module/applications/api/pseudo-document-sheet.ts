@@ -36,7 +36,7 @@ class PseudoDocumentSheet<
 				buttons: [0, 2],
 			},
 		},
-		classes: ["gurps"],
+		classes: ["traveller", "sheet"],
 		form: {
 			handler: PseudoDocumentSheet.#onSubmitForm,
 			submitOnChange: true,
@@ -189,6 +189,9 @@ class PseudoDocumentSheet<
 			Logger.error("This pseudo-document no longer exists.");
 			return super._prepareContext(options);
 		}
+
+		const hey = super._prepareContext(options);
+		console.warn(hey);
 
 		const context = {
 			tabs: this._prepareTabs("primary"),

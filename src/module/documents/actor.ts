@@ -32,13 +32,16 @@ class T5Actor<SubType extends Actor.SubType = Actor.SubType> extends Actor<SubTy
 	override getEmbeddedDocument<EmbeddedName extends Actor.Embedded.CollectionName | string>(
 		embeddedName: EmbeddedName,
 		id: string,
-		{ invalid = false, strict = false }: Document.GetEmbeddedDocumentOptions
+		{ invalid, strict }: Document.GetEmbeddedDocumentOptions = { invalid: false, strict: false }
 	): EmbeddedName extends Actor.Embedded.CollectionName
 		? Actor.Embedded.DocumentFor<EmbeddedName> | undefined
 		: PseudoDocument | undefined {
 		const systemEmbeds = (this.system?.constructor as typeof T5SystemModel).metadata.embedded ?? {};
+		console.debug("systemEmbeds");
 		if (embeddedName in systemEmbeds) {
+			console.debug(embeddedName);
 			const path = systemEmbeds[embeddedName];
+			console.debug(path);
 			// @ts-expect-error: TODO: Come back to and try to make this a bit tighter.
 			return (foundry.utils.getProperty(this, path) as ModelCollection<PseudoDocument>)?.get(id, {
 				invalid,

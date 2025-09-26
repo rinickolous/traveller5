@@ -1,0 +1,15 @@
+{{! Sheet Header }}
+<header class="sheet-header">
+	<img
+		class="profile-img"
+		src="{{document.img}}"
+		alt="{{document.name}}"
+		data-action="{{ifThen isPlay 'showPortraitArtwork' 'editImage'}}"
+		data-edit="img"
+		title="{{document.name}}"
+	/>
+	<div class="core-info flexcol">
+		{{formGroup fields.name name="name" value=source.name}}
+		</div>
+	</div>
+</header>

@@ -1,5 +1,5 @@
 {{! Sheet Header }}
-<header class="sheet-header">
+<header class="sheet-header flexrow">
 	<img
 		class="profile-img"
 		src="{{document.img}}"
@@ -18,15 +18,7 @@
 						{{#if (eq field.field.name "quality")}}
 							{{formInput field.field value=field.value disabled=@root.isPlay}}
 						{{else}}
-							<input
-								type="number"
-								min="-5"
-								max="5"
-								step="1"
-								name="{{field.field.fieldPath}}"
-								value="{{field.value}}"
-								{{#if @root.isPlay}}disabled{{/if}}
-							/>
+							{{formInput field.field value=field.value type="number" disabled=@root.isPlay}}
 						{{/if}}
 					</div>
 				</div>

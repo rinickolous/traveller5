@@ -147,7 +147,6 @@ const weaponSchema = () => {
 			choices: localizeEnum(WEAPON_PORTABILITY, "TRAVELLER.Item.weapon.Portability", "Name"),
 			initial: WEAPON_PORTABILITY.Blank,
 		}),
-		techLevel: requiredInteger({ initial: 11 }),
 
 		range: requiredInteger(),
 	};

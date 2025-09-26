@@ -59,6 +59,16 @@
 				}
 			}
 		},
+		"ACTION": {
+			"FIELDS": {},
+			"attack": {
+				"Details": "Attack Details",
+				"FIELDS": {
+					"damage": { "label": "Damage" },
+					"damageType": { "label": "Damage Type" }
+				}
+			}
+		},
 		"SKILL": {
 			"FIELDS": {
 				"level": {
@@ -126,7 +136,8 @@
 		"Item": {
 			"Tabs": {
 				"description": "Description",
-				"details": "Details"
+				"details": "Details",
+				"actions": "Actions"
 			},
 			"equipment": {
 				"FIELDS": {
@@ -137,6 +148,70 @@
 					"safety": { "label": "S" },
 					"cost": { "label": "Cost" },
 					"mass": { "label": "Mass" }
+				},
+				"Function": {
+					"Enhancer": { "Name": "Enhancer" },
+					"Protector": { "Name": "Protector" },
+					"Enabler": { "Name": "Enabler" },
+					"Resolver": { "Name": "Resolver" },
+					"Entangler": { "Name": "Entangler" },
+					"Cultural": { "Name": "Cultural" },
+					"Value": { "Name": "Value" },
+					"Analog": { "Name": "Analog" }
+				},
+				"Profile": {
+					"Cube": { "Name": "Cube" },
+					"Sphere": { "Name": "Sphere" },
+					"Cylinder": { "Name": "Cylinder" },
+					"Disk": { "Name": "Disk" },
+					"Rod": { "Name": "Rod" },
+					"ThickSheet": { "Name": "ThickSheet" },
+					"Slab": { "Name": "Slab" },
+					"Pyramid": { "Name": "Pyramid" },
+					"Vthick": { "Name": "Vthick" },
+					"Thick": { "Name": "Thick" },
+					"Typical": { "Name": "Typical" },
+					"Thin": { "Name": "Thin" },
+					"Vthin": { "Name": "Vthin" },
+					"Flat": { "Name": "Flat" },
+					"Vflat": { "Name": "Vflat" },
+					"Sheet": { "Name": "Sheet" },
+					"HeavyFabric": { "Name": "HvyFabric" },
+					"Fabric": { "Name": "Fabric" },
+					"LightFabric": { "Name": "LightFabric" },
+					"Custom": { "Name": "Custom" }
+				},
+				"Density": {
+					"Specials": { "Name": "Specials ({value})" },
+					"Wood": { "Name": "Wood ({value})" },
+					"Silanes": { "Name": "Silanes ({value})" },
+					"Hydrocarbons": { "Name": "Hydrocarbons / Synthetics ({value})" },
+					"Light": { "Name": "Light ({value})" },
+					"Standard": { "Name": "Standard ({value})" },
+					"Dense": { "Name": "Dense ({value})" },
+					"Vdense": { "Name": "Vdense ({value})" },
+					"Magnesium": { "Name": "Magnesium ({value})" },
+					"Dirt": { "Name": "Dirt ({value})" },
+					"Brick": { "Name": "Brick / Ceramic ({value})" },
+					"Aluminium": { "Name": "Aluminium / Lite Metal ({value})" },
+					"Titanium": { "Name": "Titanium / Metal ({value})" },
+					"Lanthanum": { "Name": "Lanthanum / Composite ({value})" },
+					"Steel": { "Name": "Steel / Crystaliron ({value})" },
+					"Silver": { "Name": "Silver / Dense ({value})" },
+					"Lead": { "Name": "Lead / DensePlus ({value})" },
+					"Gold": { "Name": "Gold / SuperDense ({value})" },
+					"Iridium": { "Name": "Iridium ({value})" },
+					"Starstuff": { "Name": "Starstuff ({value})" },
+					"Neutronium": { "Name": "Neutronium ({value})" },
+					"Custom": { "Name": "Custom" }
+				},
+				"PowerSupply": {
+					"PowerCells": { "Name": "Power Cells" },
+					"AmbientPanel": { "Name": "Ambient Panel" },
+					"FuelCell": { "Name": "Fuel Cell" },
+					"FusionPlus": { "Name": "Fusion Plus" },
+					"Generator": { "Name": "Generator" },
+					"PlugIn": { "Name": "Plug In" }
 				}
 			},
 			"armor": {
@@ -227,6 +302,7 @@
 				}
 			},
 			"weapon": {
+				"Description": "Weapon Description",
 				"FIELDS": {
 					"stage": { "label": "Stage" },
 					"burden": { "label": "Burden" },

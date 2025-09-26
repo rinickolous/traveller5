@@ -26,9 +26,14 @@ class T5ItemSheet extends T5DocumentSheeetMixin(sheets.ItemSheet) {
 	protected override _configureRenderParts(
 		options: api.HandlebarsApplicationMixin.RenderOptions
 	): Record<string, api.HandlebarsApplicationMixin.HandlebarsTemplatePart> {
-		const { header, tabs, details } = super._configureRenderParts(options);
+		const { header, tabs, details, description, actions } = super._configureRenderParts(options);
 
-		const parts: Record<string, api.HandlebarsApplicationMixin.HandlebarsTemplatePart> = { header, tabs };
+		const parts: Record<string, api.HandlebarsApplicationMixin.HandlebarsTemplatePart> = {
+			header,
+			tabs,
+			description,
+			actions,
+		};
 
 		const itemModel = this.document.system!.constructor as typeof t5.data.Item.BaseItemModel;
 
@@ -55,8 +60,17 @@ class T5ItemSheet extends T5DocumentSheeetMixin(sheets.ItemSheet) {
 					null;
 				await this.document.system.getSheetContext(context);
 				break;
+			case "actions":
+				context.actions = await this._getActionContext();
+				break;
 		}
 		return context;
+	}
+
+	/* ---------------------------------------- */
+
+	protected async _getActionContext() {
+		return this.document.system.actions;
 	}
 
 	/* ---------------------------------------- */
@@ -70,6 +84,8 @@ class T5ItemSheet extends T5DocumentSheeetMixin(sheets.ItemSheet) {
 		this.render();
 	}
 }
+
+/* ---------------------------------------- */
 
 interface T5ItemSheet {
 	get document(): Item.Implementation;

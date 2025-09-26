@@ -26,6 +26,9 @@ class T5EquipmentSheet extends T5ItemSheet {
 		details: {
 			template: systemPath("templates/sheets/item/details.hbs"),
 		},
+		actions: {
+			template: systemPath("templates/sheets/item/actions.hbs"),
+		},
 	};
 
 	/* ---------------------------------------- */
@@ -35,8 +38,9 @@ class T5EquipmentSheet extends T5ItemSheet {
 			tabs: [
 				{ id: "description", cssClass: "" },
 				{ id: "details", cssClass: "" },
+				{ id: "actions", cssClass: "" },
 			],
-			initial: "details",
+			initial: "actions",
 			labelPrefix: "TRAVELLER.Item.Tabs",
 		},
 	};

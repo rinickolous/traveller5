@@ -1,5 +1,5 @@
-<div class="flexcol">
-	<label>{{system.description}}</label>
+<fieldset class="flexcol">
+	<legend>{{localize "TRAVELLER.Item.weapon.Description"}}</legend>
 	{{formGroup systemFields.stage value=systemSource.stage localize=true disabled=isPlay}}
 	{{formGroup systemFields.burden value=systemSource.burden localize=true disabled=isPlay}}
 	{{formGroup
@@ -13,4 +13,7 @@
 	{{formGroup systemFields.user value=systemSource.user localize=true disabled=isPlay}}
 	{{formGroup systemFields.portability value=systemSource.portability localize=true disabled=isPlay}}
 	{{formGroup systemFields.techLevel value=systemSource.techLevel disabled=isPlay}}
-</div>
+
+	<hr />
+	{{formGroup systemFields.function value=systemSource.function localize=true disabled=isPlay}}
+</fieldset>
