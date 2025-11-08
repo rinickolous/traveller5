@@ -6,6 +6,7 @@ import {
 	THING_FUNCTION,
 	THING_POWER_SUPPLY,
 	THING_PROFILE,
+	THING_SIGNATURE,
 } from "@const";
 import { CollectionField, EHexField } from "@data/fields/index.ts";
 import { SizeField } from "@data/fields/size-field.ts";
@@ -124,8 +125,15 @@ const equipmentSchema = () => {
 		// NOTE: Mass is derived, so is skipped here.
 		// NOTE: Protection is equal to density.armorValue, so is skipped here.
 
+		controls: new fields.StringField({ required: true, nullable: false, initial: "" }),
+
 		powerSupply: enumField({
 			choices: localizeEnum(THING_POWER_SUPPLY, "TRAVELLER.Item.equipment.PowerSupply", "Name"),
+		}),
+		signature: new fields.SchemaField({
+			type: enumField({ choices: localizeEnum(THING_SIGNATURE, "TRAVELLER.Item.equipment.Signature", "Name") }),
+			// NOTE: subType is used for specifying a type of EM, Light, etc. where appropriate.
+			subType: new fields.StringField({ required: true, nullable: true, initial: null }),
 		}),
 
 		actions: new CollectionField(BaseAction),

@@ -53,8 +53,8 @@ class BaseAction<Schema extends BaseAction.Schema = BaseAction.Schema> extends T
 
 	/* ---------------------------------------- */
 
-	get item(): t5.data.Item.BaseItemModel {
-		return this.parent;
+	get item(): Item.Implementation {
+		return this.parent.parent;
 	}
 }
 

@@ -1,6 +1,6 @@
 type sizeInteger = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | "R" | "T";
 type sizeDecimal = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
-type validSize = `${sizeInteger}.${sizeDecimal}`;
+export type validSize = `${sizeInteger}` | `${sizeInteger}.${sizeDecimal}`;
 
 type FixedNumberArraySize10 = [number, number, number, number, number, number, number, number, number, number];
 

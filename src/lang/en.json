@@ -51,12 +51,9 @@
 		},
 		"PSEUDO": {
 			"FIELDS": {
-				"name": {
-					"label": "Name"
-				},
-				"type": {
-					"label": "Type"
-				}
+				"name": { "label": "Name" },
+				"img": { "label": "Image" },
+				"type": { "label": "Type" }
 			}
 		},
 		"ACTION": {
@@ -129,7 +126,13 @@
 					}
 				},
 				"Tabs": {
-					"actions": "Actions"
+					"actions": "Actions",
+					"equipment": "Equipment"
+				},
+				"Equipment": {
+					"Armor": "Armor",
+					"Other": "Other",
+					"Weapons": "Weapons"
 				}
 			}
 		},
@@ -140,6 +143,7 @@
 				"actions": "Actions"
 			},
 			"equipment": {
+				"Description": "Equipment Desccription",
 				"FIELDS": {
 					"quality": { "label": "Q" },
 					"reliability": { "label": "R" },
@@ -147,7 +151,26 @@
 					"bulk": { "label": "B" },
 					"safety": { "label": "S" },
 					"cost": { "label": "Cost" },
-					"mass": { "label": "Mass" }
+					"mass": { "label": "Mass" },
+
+					"function": { "label": "Function" },
+					"techlevel": { "label": "TL" },
+					"size": { "label": "Size" },
+					"profile": {
+						"type": { "label": "Profile" },
+						"bfp": { "label": "BFP" },
+						"length": { "label": "L" },
+						"width": { "label": "W" },
+						"height": { "label": "H" }
+					},
+					"density": {
+						"type": { "label": "Density" },
+						"value": { "label": "Value" },
+						"armorValue": { "label": "Ar" }
+					},
+					"controls": { "label": "Controls" },
+					"powerSupply": { "label": "Power Supply" },
+					"signature": { "label": "Signature" }
 				},
 				"Function": {
 					"Enhancer": { "Name": "Enhancer" },
@@ -443,6 +466,7 @@
 		},
 		"SHEET": {
 			"ToggleMode": "Toggle Play/Edit Mode",
+			"View": "View",
 			"Labels": {
 				"Character": "Traveller 5 Character Record",
 				"Equipment": "Traveller 5 Equipment Record"

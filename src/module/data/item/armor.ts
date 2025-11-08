@@ -2,9 +2,9 @@ import {
 	ARMOR_BURDEN,
 	ARMOR_DESCRIPTOR,
 	ARMOR_DESCRIPTOR_SUIT,
-	ARMOR_STAGE,
 	ARMOR_TYPES,
 	ARMOR_USER,
+	EQUIPMENT_STAGE,
 	ITEM_TYPES,
 } from "@const";
 import { requiredInteger } from "@data/helpers.ts";
@@ -24,7 +24,7 @@ class ArmorModel extends EquipmentModel<ArmorSchema> {
 	/* ---------------------------------------- */
 
 	get description(): string {
-		const stage = this.stage !== ARMOR_STAGE.Blank ? this.stage : "";
+		const stage = this.stage !== EQUIPMENT_STAGE.Blank ? this.stage : "";
 		const burden = this.burden !== ARMOR_BURDEN.Blank ? this.burden : "";
 		const inParen = stage || burden ? `(${stage}${burden}) ` : "";
 
@@ -51,8 +51,8 @@ const armorSchema = () => {
 		stage: new fields.StringField({
 			required: true,
 			nullable: false,
-			choices: ARMOR_STAGE,
-			initial: ARMOR_STAGE.Blank,
+			choices: EQUIPMENT_STAGE,
+			initial: EQUIPMENT_STAGE.Blank,
 		}),
 		burden: new fields.StringField({
 			required: true,

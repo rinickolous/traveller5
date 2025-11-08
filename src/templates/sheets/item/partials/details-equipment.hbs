@@ -1,0 +1,51 @@
+<fieldset class="flexcol">
+	<legend>{{localize "TRAVELLER.Item.equipment.Description"}}</legend>
+	{{formGroup systemFields.function value=systemSource.function localize=true disabled=isPlay}}
+	{{formGroup systemFields.techLevel value=systemSource.techLevel localize=true disabled=isPlay}}
+	{{formGroup systemFields.size value=systemSource.size localize=true disabled=isPlay}}
+	<div class="flexrow">
+		{{formGroup systemFields.profile.fields.type value=systemSource.profile.type localize=true disabled=isPlay}}
+		{{formGroup
+			systemFields.profile.fields.bfp
+			value=systemSource.profile.bfp
+			localize=true
+			disabled=(or isPlay (ne system.profile.type "Custom"))
+		}}
+		{{formGroup
+			systemFields.profile.fields.length
+			value=systemSource.profile.length
+			localize=true
+			disabled=(or isPlay (ne system.profile.type "Custom"))
+		}}
+		{{formGroup
+			systemFields.profile.fields.width
+			value=systemSource.profile.width
+			localize=true
+			disabled=(or isPlay (ne system.profile.type "Custom"))
+		}}
+		{{formGroup
+			systemFields.profile.fields.height
+			value=systemSource.profile.height
+			localize=true
+			disabled=(or isPlay (ne system.profile.type "Custom"))
+		}}
+	</div>
+	<div class="flexrow">
+		{{formGroup systemFields.density.fields.type value=systemSource.density.type localize=true disabled=isPlay}}
+		{{formGroup
+			systemFields.density.fields.value
+			value=systemSource.density.value
+			localize=true
+			disabled=(or isPlay (ne system.density.type "Custom"))
+		}}
+		{{formGroup
+			systemFields.density.fields.armorValue
+			value=systemSource.density.armorValue
+			localize=true
+			disabled=(or isPlay (ne system.density.type "Custom"))
+		}}
+	</div>
+	{{formGroup systemFields.controls value=systemSource.controls disabled=isPlay}}
+	{{formGroup systemFields.powerSupply value=systemSource.powerSupply localize=true disabled=isPlay}}
+
+</fieldset>

@@ -14,23 +14,35 @@ import { pseudoDocuments } from "@data";
 /*   Pseudo-Documents                       */
 /* ---------------------------------------- */
 
-export const Action = {
-	base: {
-		documentClass: pseudoDocuments.actions.BaseAction,
-	},
+interface PseudoDocumentEntry {
+	documentClass: foundry.abstract.DataModel.AnyConstructor;
+	label: string;
+}
+
+export const Action: Record<ACTION_TYPES, PseudoDocumentEntry> = {
 	[ACTION_TYPES.ATTACK]: {
 		documentClass: pseudoDocuments.actions.AttackAction,
+		label: "TYPES.Action.attack",
 	},
 };
 
-export const Skill = {
-	base: {
-		documentClass: pseudoDocuments.skills.BaseSkill,
+export const Skill: Record<SKILL_TYPES, PseudoDocumentEntry> = {
+	[SKILL_TYPES.INTUITION]: {
+		documentClass: pseudoDocuments.skills.Intuition,
+		label: "TYPES.Skill.intuition",
 	},
-	[SKILL_TYPES.INTUITION]: { documentClass: pseudoDocuments.skills.Intuition },
-	[SKILL_TYPES.KNOWLEDGE]: { documentClass: pseudoDocuments.skills.Knowledge },
-	[SKILL_TYPES.SKILL]: { documentClass: pseudoDocuments.skills.Skill },
-	[SKILL_TYPES.TALENT]: { documentClass: pseudoDocuments.skills.Talent },
+	[SKILL_TYPES.KNOWLEDGE]: {
+		documentClass: pseudoDocuments.skills.Knowledge,
+		label: "TYPES.Skill.knowledge",
+	},
+	[SKILL_TYPES.SKILL]: {
+		documentClass: pseudoDocuments.skills.Skill,
+		label: "TYPES.Skill.skill",
+	},
+	[SKILL_TYPES.TALENT]: {
+		documentClass: pseudoDocuments.skills.Talent,
+		label: "TYPES.Skill.talent",
+	},
 };
 
 /* ---------------------------------------- */

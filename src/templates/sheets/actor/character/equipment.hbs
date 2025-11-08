@@ -1,0 +1,29 @@
+<section class="tab {{tab.cssClass}}" data-group="primary" data-tab="equipment">
+	<button type="button">
+		<i class="fa-solid fa-plus"></i>
+		Add Action
+	</button>
+	{{! Action Table }}
+	{{#each equipment as |category|}}
+		<table class="equipment-table">
+			<thead>
+				<tr>
+					<th></th>
+					<th>{{localize category.label}}</th>
+					<th>Mass</th>
+					<th>Cost</th>
+				</tr>
+			</thead>
+			<tbody>
+				{{#each category.items as |item|}}
+					<tr class="equipment-entry" data-document-class="Item" data-item-id="{{item._id}}">
+						<td><img src="{{item.img}}" /></td>
+						<td>{{item.name}}</td>
+						<td>{{item.system.mass}}</td>
+						<td>{{item.system.cost}}</td>
+					</tr>
+				{{/each}}
+			</tbody>
+		</table>
+	{{/each}}
+</section>

@@ -40,7 +40,10 @@ class WeaponModel extends EquipmentModel<WeaponSchema> {
 		return {
 			...super.metadata,
 			type: ITEM_TYPES.WEAPON,
-			detailsPartial: [systemPath("templates/sheets/item/partials/details-weapon.hbs")],
+			detailsPartial: [
+				systemPath("templates/sheets/item/partials/details-equipment.hbs"),
+				systemPath("templates/sheets/item/partials/details-weapon.hbs"),
+			],
 		};
 	}
 

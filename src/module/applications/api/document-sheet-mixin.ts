@@ -118,10 +118,17 @@ export const T5DocumentSheeetMixin = (Base: api.DocumentSheet.AnyConstructor) =>
 				documentName
 			).documentClass;
 
-			if (!type && foundry.utils.isSubclass(Cls, traveller.data.pseudoDocuments.TypedPseudoDocument)) {
-				Cls.createDialog({}, { parent: this.document });
-			} else if (type) {
-				(Cls as typeof t5.data.pseudoDocuments.TypedPseudoDocument).create({ type }, { parent: this.document });
+			if (foundry.utils.isSubclass(Cls, traveller.data.pseudoDocuments.TypedPseudoDocument)) {
+				if (type) {
+					(Cls as typeof t5.data.pseudoDocuments.TypedPseudoDocument).create(
+						{ type },
+						{ parent: this.document }
+					);
+				} else {
+					Cls.createDialog({}, { parent: this.document });
+				}
+			} else if (foundry.utils.isSubclass(Cls, traveller.data.pseudoDocuments.PseudoDocument)) {
+				Cls.create({}, { parent: this.document });
 			} else {
 				tu.Logger.error(`Could not determine type for new ${documentName}`);
 			}

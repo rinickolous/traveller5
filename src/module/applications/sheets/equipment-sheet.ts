@@ -40,7 +40,7 @@ class T5EquipmentSheet extends T5ItemSheet {
 				{ id: "details", cssClass: "" },
 				{ id: "actions", cssClass: "" },
 			],
-			initial: "actions",
+			initial: "details",
 			labelPrefix: "TRAVELLER.Item.Tabs",
 		},
 	};

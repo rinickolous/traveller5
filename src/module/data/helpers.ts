@@ -9,7 +9,19 @@ export const requiredInteger = (
 
 /* ---------------------------------------- */
 
-export const enumField = ({ choices }: { choices: fields.StringField.Choices }) => new fields.StringField({ choices });
+export const enumField = (
+	{
+		choices,
+		initial,
+		required,
+		nullable,
+	}: {
+		choices: fields.StringField.Choices;
+		initial?: string | null;
+		required?: boolean;
+		nullable?: boolean;
+	} = { choices: [], required: true, nullable: true, initial: null }
+) => new fields.StringField({ required, nullable, choices, initial });
 
 /* ---------------------------------------- */
 

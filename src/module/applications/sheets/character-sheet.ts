@@ -1,5 +1,6 @@
-import { ACTOR_TYPES, SKILL_TYPES, systemPath } from "@const";
+import { ACTION_TYPES, ACTOR_TYPES, ITEM_TYPES, SKILL_TYPES, systemPath } from "@const";
 import Logger from "@utils/logger";
+import { DeepPartial } from "fvtt-types/utils";
 import { T5ActorSheet } from "./actor-sheet.ts";
 import api = foundry.applications.api;
 
@@ -30,14 +31,20 @@ class T5CharacterSheet extends T5ActorSheet {
 		actions: {
 			template: systemPath("templates/sheets/actor/character/actions.hbs"),
 		},
+		equipment: {
+			template: systemPath("templates/sheets/actor/character/equipment.hbs"),
+		},
 	};
 
 	/* ---------------------------------------- */
 
 	static override TABS: Record<string, api.Application.TabsConfiguration> = {
 		primary: {
-			tabs: [{ id: "actions", cssClass: "" }],
-			initial: "actions",
+			tabs: [
+				{ id: "actions", cssClass: "" },
+				{ id: "equipment", cssClass: "" },
+			],
+			initial: "equipment",
 			labelPrefix: "TRAVELLER.Actor.character.Tabs",
 		},
 	};
@@ -77,6 +84,41 @@ class T5CharacterSheet extends T5ActorSheet {
 	/* ---------------------------------------- */
 
 	static async #rollSkill(this: T5CharacterSheet, _event: PointerEvent, _target: HTMLElement) {}
+
+	/* ---------------------------------------- */
+
+	protected override async _preparePartContext(
+		partId: string,
+		context: T5ActorSheet.RenderContext,
+		options: DeepPartial<api.HandlebarsApplicationMixin.RenderOptions>
+	): Promise<T5ActorSheet.RenderContext> {
+		await super._preparePartContext(partId, context, options);
+
+		switch (partId) {
+			case "actions": {
+				context.attacks = this.actor.itemTypes.weapon.reduce((acc, weapon) => {
+					acc.push(...weapon.system.actions.getByType(ACTION_TYPES.ATTACK));
+					return acc;
+				}, [] as t5.data.pseudoDocuments.actions.AttackAction[]);
+
+				break;
+			}
+			case "equipment": {
+				context.equipment = {
+					[ITEM_TYPES.ARMOR]: {
+						label: "TRAVELLER.Actor.character.Equipment.Armor",
+						items: this.actor.itemTypes.armor,
+					},
+					[ITEM_TYPES.WEAPON]: {
+						label: "TRAVELLER.Actor.character.Equipment.Weapons",
+						items: this.actor.itemTypes.weapon,
+					},
+				};
+			}
+		}
+
+		return context;
+	}
 }
 
 /* ---------------------------------------- */

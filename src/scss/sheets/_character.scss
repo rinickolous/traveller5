@@ -1,2 +1,8 @@
 .traveller.actor.character {
+	.equipment-entry img {
+		max-height: 3rem;
+		aspect-ratio: 1 / 1;
+		flex-grow: 0;
+		border: 0.1rem solid black;
+	}
 }

@@ -1,7 +1,30 @@
 import { SimpleMerge } from "fvtt-types/utils";
 import fields = foundry.data.fields;
 
+namespace SizeField {
+	export interface Options extends fields.StringField.Options {
+		initial: tu.size.validSize;
+	}
+
+	export type DefaultOptions = fields.StringField.DefaultOptions & {
+		required: true;
+		nullable: false;
+		initial: "1";
+	};
+}
+
 class SizeField extends fields.StringField {
+	protected static get _defaults(): fields.StringField.Options<unknown> {
+		return {
+			...super._defaults,
+			required: true,
+			nullable: false,
+			initial: "1",
+		};
+	}
+
+	/* ---------------------------------------- */
+
 	protected override _validateType(
 		value: fields.DataField.DerivedInitializedType<
 			string,

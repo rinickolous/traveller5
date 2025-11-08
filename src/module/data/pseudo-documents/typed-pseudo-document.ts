@@ -2,7 +2,7 @@ import fields = foundry.data.fields;
 import DataModel = foundry.abstract.DataModel;
 import Document = foundry.abstract.Document;
 
-import { PSEUDO_DOCUMENT_NAMES } from "@const";
+import { PSEUDO_DOCUMENT_NAMES, systemPath } from "@const";
 import { GetKey } from "fvtt-types/utils";
 import { PseudoDocument } from "./pseudo-document.ts";
 
@@ -78,6 +78,10 @@ class TypedPseudoDocument<
 
 	/* ---------------------------------------- */
 
+	static override CREATE_TEMPLATE = systemPath("templates/sheets/pseudo-documents/typed-create-dialog.hbs");
+
+	/* ---------------------------------------- */
+
 	/**
 	 * The localized label for this typed pseudodocument's type.
 	 */
@@ -102,6 +106,19 @@ class TypedPseudoDocument<
 			);
 		}
 		return super.create(data, { parent, ...operation });
+	}
+
+	/* ---------------------------------------- */
+
+	protected static override _prepareCreateDialogContext(_parent: foundry.abstract.Document.Any | undefined) {
+		const typeOptions = Object.entries(traveller.config[this.metadata.documentName as PSEUDO_DOCUMENT_NAMES]).map(
+			([value, { label }]) => ({ value, label })
+		);
+
+		return {
+			typeOptions,
+			fields: this.schema.fields,
+		};
 	}
 }
 

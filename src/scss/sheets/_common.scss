@@ -37,6 +37,9 @@
 	}
 
 	div.form-group {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
 		background-color: var(--color-input-bg);
 		border: 0.1rem solid var(--color-border);
 
@@ -44,11 +47,13 @@
 			font-size: var(--font-size-12);
 			color: var(--color-input-label);
 			margin-left: 0.25rem;
+			line-height: normal;
 		}
 
 		div.form-fields {
 			display: flex;
 			flex-direction: row;
+			width: 100%;
 
 			font-size: var(--font-size-16);
 

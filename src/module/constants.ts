@@ -95,6 +95,22 @@ export enum CHARACTERISTICS {
 /*   Equipment                              */
 /* ---------------------------------------- */
 
+export enum EQUIPMENT_STAGE {
+	Experimental = "Experimental",
+	Prototype = "Prototype",
+	Early = "Early",
+	Basic = "Basic",
+	Blank = "Blank",
+	Standard = "Standard",
+	Improved = "Improved",
+	Modified = "Modified",
+	Advanced = "Advanced",
+	Obsolete = "Obsolete",
+	Alternate = "Alternate",
+}
+
+/* ---------------------------------------- */
+
 export enum THING_FUNCTION {
 	Enhancer = "Enhancer",
 	Protector = "Protector",
@@ -183,6 +199,21 @@ export enum THING_POWER_SUPPLY {
 	FusionPlus = "FusionPlus",
 	Generator = "Generator",
 	PlugIn = "PlugIn",
+}
+
+/* ---------------------------------------- */
+
+export enum THING_SIGNATURE {
+	Electric = "Electric",
+	Gravitic = "Gravitic",
+	Magnetic = "Magnetic",
+	Electromagnetic = "Electromagnetic",
+	Light = "Light",
+	Sound = "Sound",
+	Smell = "Smell",
+	Touch = "Touch",
+	Awareness = "Awareness",
+	Perception = "Perception",
 }
 
 /* ---------------------------------------- */
@@ -362,22 +393,6 @@ export const WEAPON_DESCRIPTION = {
 
 /* ---------------------------------------- */
 /*   Armor                                  */
-/* ---------------------------------------- */
-
-export enum ARMOR_STAGE {
-	Experimental = "Experimental",
-	Prototype = "Prototype",
-	Early = "Early",
-	Basic = "Basic",
-	Blank = "Blank",
-	Standard = "Standard",
-	Improved = "Improved",
-	Modified = "Modified",
-	Advanced = "Advanced",
-	Obsolete = "Obsolete",
-	Alternate = "Alternate",
-}
-
 /* ---------------------------------------- */
 
 export enum ARMOR_BURDEN {

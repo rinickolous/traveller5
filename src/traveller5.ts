@@ -76,5 +76,23 @@ Hooks.once("init", () => {
 
 /* ---------------------------------------- */
 
-Hooks.once("ready", async () => {});
-await data.migrations.migrateWorld();
+Hooks.once("i18nInit", async () => {
+	// Localize pseudo-documents. Base first, then loop through the types in use
+	foundry.helpers.Localization.localizeDataModel(data.pseudoDocuments.actions.BaseAction);
+	foundry.helpers.Localization.localizeDataModel(data.pseudoDocuments.skills.BaseSkill);
+
+	const localizePseudos = (record: Record<string, typeof data.pseudoDocuments.TypedPseudoDocument>) => {
+		for (const cls of Object.values(record)) {
+			foundry.helpers.Localization.localizeDataModel(cls);
+		}
+	};
+
+	localizePseudos(data.pseudoDocuments.actions.BaseAction.TYPES);
+	localizePseudos(data.pseudoDocuments.skills.BaseSkill.TYPES);
+});
+
+/* ---------------------------------------- */
+
+Hooks.once("ready", async () => {
+	await data.migrations.migrateWorld();
+});
